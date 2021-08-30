@@ -5,6 +5,8 @@ import polib
 
 import toml
 
+django_clone_path = '/Users/maciek/projects/django/'
+
 with open('languages/fr.toml') as rules_src:
     rules = toml.load(rules_src)
 
@@ -32,7 +34,7 @@ for package, domain in (
     + (('contrib/admin', 'djangojs'),)
 ):
     print(package)
-    pofile = polib.pofile(f'/Users/maciek/projects/django/django/{package}/locale/fr/LC_MESSAGES/{domain}.po')
+    pofile = polib.pofile(f'{django_clone_path}django/{package}/locale/fr/LC_MESSAGES/{domain}.po')
 
     for entry in pofile:
         if groups := re.findall(r'%(\(([a-z_]+)\))?s|{([a-z_]*)}', entry.msgid):
