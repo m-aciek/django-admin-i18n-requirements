@@ -43,5 +43,5 @@ for package, domain in (
             param_names = [match[1] or match[2] for match in groups]
             c.update(param_names)
             # if "name" in param_names:
-            print(entry.msgid, entry.flags, entry.msgstr, rules.get(entry.msgid))
+            print(entry.msgid, entry.flags, entry.comment, entry.msgstr, rules.get(entry.msgid))
 print(c)
