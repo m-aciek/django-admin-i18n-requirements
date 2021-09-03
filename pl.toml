@@ -1,0 +1,96 @@
+['Delete selected %(verbose_name_plural)s'.gender]
+'masculine personal' = 'Usuń wybranych %(verbose_name_plural.accusative)s'
+'other' = 'Usuń wybrane %(verbose_name_plural.accusative)s'
+
+['Successfully deleted %(count)d %(items)s.'.gender.'masculine personal'.plurals]
+one = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
+few = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
+many = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
+other = 'Pomyślnie usunięto %(count)d %(items.accusative)s.'
+['Successfully deleted %(count)d %(items)s.'.gender.'other'.plurals]
+one = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
+few = 'Pomyślnie usunięto %(count)d %(items)s.'
+many = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
+other = 'Pomyślnie usunięto %(count)d %(items.accusative)s.'
+
+'Cannot delete %(name)s' = 'Nie można usunąć %(name.genitive)s'
+
+['Add another %(verbose_name)s'.gender]
+'masculine animate' = 'Dodaj kolejnego %(verbose_name.accusative)s'
+'masculine inanimate' = 'Dodaj kolejny %(verbose_name.accusative)s'
+'feminine' = 'Dodaj kolejną %(verbose_name.accusative)s'
+'neuter' = 'Dodaj kolejne %(verbose_name.accusative)s'
+
+'Added {name} “{object}”.' = 'Dodano {name.accusative} „{object}”.'
+'Changed {fields} for {name} “{object}”.' = 'Zmodyfikowano {fields} {name.genitive} „{object}”'
+'Deleted {name} “{object}”.' = 'Usunięto {name.accusative} „{object}”.'
+
+['The {name} “{obj}” was added successfully.'.gender]
+masculine = '{name} „{obj}” został dodany pomyślnie.'
+feminine = '{name} „{obj}” została dodana pomyślnie.'
+neuter = '{name} „{obj}” zostało dodane pomyślnie.'
+
+['The {name} “{obj}” was added successfully. You may add another {name} below.'.gender]
+'masculine animate' = '{name} „{obj}” został dodany pomyślnie. Można dodać kolejnego {name.accusative} poniżej.'
+'masculine inanimate' = '{name} „{obj}” został dodany pomyślnie. Można dodać kolejny {name.accusative} poniżej.'
+'feminine' = '{name} „{obj}” została dodana pomyślnie. Można dodać kolejną {name.accusative} poniżej.'
+'neuter' = '{name} „{obj}” zostało dodane pomyślnie. Można dodać kolejne {name.accusative} poniżej.'
+
+['The {name} “{obj}” was changed successfully. You may edit it again below.'.gender]
+masculine = '{name} „{obj}” został pomyślnie zmieniony. Można edytować go ponownie poniżej.'
+feminine = '{name} „{obj}” została pomyślnie zmieniona. Można edytować ją ponownie poniżej.'
+neuter = '{name} „{obj}” zostało pomyślnie zmienione. Można edytować je ponownie poniżej.'
+
+['The {name} “{obj}” was added successfully. You may edit it again below.'.gender]
+masculine = '{name} „{obj}” został dodany pomyślnie. Można edytować go ponownie poniżej.'
+feminine = '{name} „{obj}” została dodana pomyślnie. Można edytować ją ponownie poniżej.'
+neuter = '{name} „{obj}” zostało dodane pomyślnie. Można edytować je ponownie poniżej.'
+
+['The {name} “{obj}” was changed successfully. You may add another {name} below.'.gender]
+'masculine animate' = '{name} „{obj}” został pomyślnie zmieniony. Można dodać kolejnego {name.accusative} poniżej.'
+'masculine inanimate' = '{name} „{obj}” został pomyślnie zmieniony. Można dodać kolejny {name.accusative} poniżej.'
+'feminine' = '{name} „{obj}” została pomyślnie zmieniona. Można dodać kolejną {name.accusative} poniżej.'
+'neuter' = '{name} „{obj}” zostało pomyślnie zmienione. Można dodać kolejne {name.accusative} poniżej.'
+
+['The {name} “{obj}” was changed successfully.'.gender]
+masculine = '{name} „{obj}” został pomyślnie zmieniony.'
+feminine = '{name} „{obj}” została pomyślnie zmieniona.'
+neuter = '{name} „{obj}” zostało pomyślnie zmienione.'
+
+['The %(name)s “%(obj)s” was deleted successfully.'.gender]
+masculine = '%(name)s „%(obj)s” usunięty pomyślnie.'
+feminine = '%(name)s „%(obj)s” usunięta pomyślnie.'
+neuter = '%(name)s „%(obj)s” usunięte pomyślnie.'
+
+['%(name)s with ID “%(key)s” doesn’t exist. Perhaps it was deleted?'.gender]
+masculine = '%(name)s z ID „%(key)s” nie istnieje. Może został usunięty?'
+feminine = '%(name)s z ID „%(key)s” nie istnieje. Może została usunięta?'
+neuter = '%(name)s z ID „%(key)s” nie istnieje. Może zostało usunięte?'
+
+'Add %s' = 'Dodaj %(.accusative)s'
+'Change %s' = 'Zmień %(.accusative)s'
+'View %s' = 'Obejrzyj %(.accusative)s'
+
+['%(count)s %(name)s was changed successfully.'.plurals.one.gender]
+masculine = '%(count)s %(name)s został pomyślnie zmieniony.'
+feminine = '%(count)s %(name)s została pomyślnie zmieniona.'
+neuter = '%(count)s %(name)s zostało pomyślnie zmienione.'
+
+['%(count)s %(name)s was changed successfully.'.plurals.few.gender]
+'masculine personal' = '%(count)s %(name.genitive)s zostało pomyślnie zmienionych.'
+'other' = '%(count)s %(name)s zostały pomyślnie zmienione.'
+
+['%(count)s %(name)s was changed successfully.'.plurals]
+many = '%(count)s %(name.genitive)s zostało pomyślnie zmienionych.'
+other = '%(count)s %(name.genitive)s zostało pomyślnie zmienione.'
+
+'Deleting %(class_name)s %(instance)s would require deleting the following protected related objects: %(related_objects)s' = 'Usunięcie %(class_name.genitive)s %(instance)s może wiązać się z usunięciem następujących chronionych obiektów pokrewnych: %(related_objects)s'
+
+['Select all %(total_count)s %(module_name)s'.plurals]
+one = 'Wybierz %(total_count)s %(module_name)s'
+['Select all %(total_count)s %(module_name)s'.plurals.few.gender]
+'masculine personal' = 'Wybierz wszystkich %(total_count)s %(module_name.genitive)s'
+'other' = 'Wybierz wszystkie %(total_count)s %(module_name)s'
+['Select all %(total_count)s %(module_name)s'.plurals.many.gender]
+'masculine personal' = 'Wybierz wszystkich %(total_count)s %(module_name.genitive)s'
+'other' = 'Wybierz wszystkie %(total_count)s %(module_name.genitive)s'

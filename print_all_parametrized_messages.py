@@ -8,7 +8,7 @@ import toml
 django_clone_path = '/Users/maciek/projects/django'
 language = 'pl'
 
-with open(f'languages/{language}.toml') as rules_src:
+with open(f'{language}.toml') as rules_src:
     rules = toml.load(rules_src)
 
 c = Counter()
