@@ -38,14 +38,21 @@ for package, domain in (
     )
     + (('contrib/admin', 'djangojs'),)
 ):
-    print(package)
+    print(f'[package name: {package}]')
     pofile = polib.pofile(f'{django_clone_path}/django/{package}/locale/{language}/LC_MESSAGES/{domain}.po')
 
     for entry in pofile:
         if groups := re.findall(r'%(\(([a-z_]+)\))?s|{([a-z_]*)}', entry.msgid):
-            # print([match[1] or match[2] for match in groups])
             param_names = [match[1] or match[2] for match in groups]
             c.update(param_names)
-            # if "name" in param_names:
-            print(entry.msgid, entry.flags, entry.comment, entry.msgstr, rules.get(entry.msgid))
-print(c)
+            print(
+                entry.msgid,
+                entry.msgctxt,
+                'PLURAL' if entry.msgid_plural else None,
+                # entry.flags,
+                entry.comment,
+                entry.msgstr_plural if entry.msgid_plural else entry.msgstr,
+                rules.get(entry.msgid),
+            )
+
+print('names of placeholders with count of their occurrence:', c)
