@@ -1,0 +1,3 @@
+['Select %s to change'.gender]
+masculine = 'اختر %s لتغييره'
+feminine = 'اختر %s لتغييرها'

@@ -1,0 +1,3 @@
+['Delete selected %(verbose_name_plural)s'.gender]
+'feminine' = 'Supprimer les %(verbose_name_plural)s sélectionnées'
+'other' = 'Supprimer les %(verbose_name_plural)s sélectionnés'

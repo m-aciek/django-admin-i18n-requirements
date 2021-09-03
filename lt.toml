@@ -1,0 +1,3 @@
+['Delete selected %(verbose_name_plural)s'.gender]
+'masculine' = 'Ištrinti pažymėtus %(verbose_name_plural)s'
+'feminine' = 'Ištrinti pažymėtas %(verbose_name_plural)s'
