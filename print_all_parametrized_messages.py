@@ -1,12 +1,16 @@
 import re
 from collections import Counter
+from sys import argv
 
 import polib
 
 import toml
 
 django_clone_path = '/Users/maciek/projects/django'
-language = 'pl'
+try:
+    language = argv[1]
+except IndexError:
+    language = 'pl'
 
 with open(f'{language}.toml') as rules_src:
     rules = toml.load(rules_src)
