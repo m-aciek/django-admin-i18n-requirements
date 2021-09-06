@@ -1,3 +1,12 @@
+'Cannot delete %(name)s' = 'Nie można usunąć %(name.genitive)s'
+'Added {name} “{object}”.' = 'Dodano {name.accusative} „{object}”.'
+'Changed {fields} for {name} “{object}”.' = 'Zmodyfikowano {fields} {name.genitive} „{object}”'
+'Deleted {name} “{object}”.' = 'Usunięto {name.accusative} „{object}”.'
+'Add %s' = 'Dodaj %(.accusative)s'
+'Change %s' = 'Zmień %(.accusative)s'
+'View %s' = 'Obejrzyj %(.accusative)s'
+'Deleting %(class_name)s %(instance)s would require deleting the following protected related objects: %(related_objects)s' = 'Usunięcie %(class_name.genitive)s %(instance)s może wiązać się z usunięciem następujących chronionych obiektów pokrewnych: %(related_objects)s'
+
 ['Delete selected %(verbose_name_plural)s'.gender]
 'masculine personal' = 'Usuń wybranych %(verbose_name_plural.accusative)s'
 'other' = 'Usuń wybrane %(verbose_name_plural.accusative)s'
@@ -13,17 +22,11 @@ few = 'Pomyślnie usunięto %(count)d %(items)s.'
 many = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
 other = 'Pomyślnie usunięto %(count)d %(items.accusative)s.'
 
-'Cannot delete %(name)s' = 'Nie można usunąć %(name.genitive)s'
-
 ['Add another %(verbose_name)s'.gender]
 'masculine animate' = 'Dodaj kolejnego %(verbose_name.accusative)s'
 'masculine inanimate' = 'Dodaj kolejny %(verbose_name.accusative)s'
 'feminine' = 'Dodaj kolejną %(verbose_name.accusative)s'
 'neuter' = 'Dodaj kolejne %(verbose_name.accusative)s'
-
-'Added {name} “{object}”.' = 'Dodano {name.accusative} „{object}”.'
-'Changed {fields} for {name} “{object}”.' = 'Zmodyfikowano {fields} {name.genitive} „{object}”'
-'Deleted {name} “{object}”.' = 'Usunięto {name.accusative} „{object}”.'
 
 ['The {name} “{obj}” was added successfully.'.gender]
 masculine = '{name} „{obj}” został dodany pomyślnie.'
@@ -67,10 +70,6 @@ masculine = '%(name)s z ID „%(key)s” nie istnieje. Może został usunięty?'
 feminine = '%(name)s z ID „%(key)s” nie istnieje. Może została usunięta?'
 neuter = '%(name)s z ID „%(key)s” nie istnieje. Może zostało usunięte?'
 
-'Add %s' = 'Dodaj %(.accusative)s'
-'Change %s' = 'Zmień %(.accusative)s'
-'View %s' = 'Obejrzyj %(.accusative)s'
-
 ['%(count)s %(name)s was changed successfully.'.plurals.one.gender]
 masculine = '%(count)s %(name)s został pomyślnie zmieniony.'
 feminine = '%(count)s %(name)s została pomyślnie zmieniona.'
@@ -83,8 +82,6 @@ neuter = '%(count)s %(name)s zostało pomyślnie zmienione.'
 ['%(count)s %(name)s was changed successfully.'.plurals]
 many = '%(count)s %(name.genitive)s zostało pomyślnie zmienionych.'
 other = '%(count)s %(name.genitive)s zostało pomyślnie zmienione.'
-
-'Deleting %(class_name)s %(instance)s would require deleting the following protected related objects: %(related_objects)s' = 'Usunięcie %(class_name.genitive)s %(instance)s może wiązać się z usunięciem następujących chronionych obiektów pokrewnych: %(related_objects)s'
 
 ['Select all %(total_count)s %(module_name)s'.plurals]
 one = 'Wybierz %(total_count)s %(module_name)s'
