@@ -73,12 +73,13 @@ for package, domain in (
     + (('contrib/admin', 'djangojs'),)
 ):
     pofile = polib.pofile(f'{django_clone_path}/django/{package}/locale/{language}/LC_MESSAGES/{domain}.po')
+    pofile_en = polib.pofile(f'{django_clone_path}/django/{package}/locale/en/LC_MESSAGES/{domain}.po')
 
     table = Table(show_lines=True, title=package)
     table.add_column('current translation with examples')
     table.add_column('enhanced translation')
     table.add_column('enhanced examples')
-    for entry in pofile:
+    for entry, entry_en in zip(pofile, pofile_en):
         if match_groups := re.findall(r'%(\(([a-z_]+)\))?s|{([a-z_]*)}', entry.msgid):
             param_names = [match[1] or match[2] for match in match_groups]
             c.update(param_names)
@@ -120,10 +121,15 @@ for package, domain in (
                     elif type(gendered) == dict:
                         pass
             current = Text()
+            current.append('\n'.join(f'{path}:{line}' for path, line in entry_en.occurrences) + '\n')
             current.append(entry.msgid + '\n', "bold")
             current.append(entry.msgstr + '\n', "bold")
             current.append('\n'.join(examples))
-            table.add_row(current, Pretty(rule), shouldbeoutput)
+            table.add_row(
+                current,
+                Pretty(rule),
+                shouldbeoutput,
+            )
     console.print(table)
 
 console.print('names of placeholders with count of their occurrence:', str(c))
