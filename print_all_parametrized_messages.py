@@ -5,6 +5,10 @@ from sys import argv
 import polib
 
 import toml
+from rich.console import Console
+from rich.pretty import Pretty
+from rich.table import Table
+from rich.text import Text
 
 django_clone_path = '/Users/maciek/projects/django'
 try:
@@ -44,6 +48,8 @@ contenttypes = contenttypes_file.find('content types').msgstr
 singulars = (user, group, permission, session, site, redirect, flatpage, logentry, contenttype)
 plurals = (users, groups, permissions, sessions, sites, redirects, flatpages, logentries, contenttypes)
 c = Counter()
+
+console = Console()
 for package, domain in (
     tuple(
         (
@@ -66,12 +72,15 @@ for package, domain in (
     )
     + (('contrib/admin', 'djangojs'),)
 ):
-    print(f'[package name: {package}]')
     pofile = polib.pofile(f'{django_clone_path}/django/{package}/locale/{language}/LC_MESSAGES/{domain}.po')
 
+    table = Table(show_lines=True, title=package)
+    table.add_column('current translation with examples')
+    table.add_column('enhanced translation')
+    table.add_column('enhanced examples')
     for entry in pofile:
-        if groups := re.findall(r'%(\(([a-z_]+)\))?s|{([a-z_]*)}', entry.msgid):
-            param_names = [match[1] or match[2] for match in groups]
+        if match_groups := re.findall(r'%(\(([a-z_]+)\))?s|{([a-z_]*)}', entry.msgid):
+            param_names = [match[1] or match[2] for match in match_groups]
             c.update(param_names)
             examples = []
             if param_names[0] == 'verbose_name_plural':
@@ -80,15 +89,41 @@ for package, domain in (
                         examples.append(entry.msgstr % {param_names[0]: model})
                     except KeyError:
                         pass
-            print(
-                entry.msgid,
-                entry.msgctxt,
-                'PLURAL' if entry.msgid_plural else None,
-                # entry.flags,
-                entry.comment,
-                entry.msgstr_plural if entry.msgid_plural else entry.msgstr,
-                rules.get(entry.msgid),
-                examples,
-            )
+            if param_names[0] == 'items':
+                for singular, plural in zip(singulars, plurals):
+                    examples.append(entry.msgstr % {'count': 1, 'items': singular})
+                    examples.append(entry.msgstr % {'count': 2, 'items': plural})
+                    examples.append(entry.msgstr % {'count': 5, 'items': plural})
+            shouldbeoutput = ''
+            rule = rules.get(entry.msgid)
+            if not rule:
+                shouldbeoutput += 'no need to enhance'
+            for name, name_plural, translation_plural in (
+                ('user', 'users', users),
+                ('group', 'groups', groups),
+                ('permission', 'permissions', permissions),
+                ('session', 'sessions', sessions),
+                ('site', 'sites', sites),
+                ('redirect', 'redirects', redirects),
+                ('flat page', 'flatpages', flatpages),
+                ('log entry', 'logentries', logentries),
+                ('content type', 'contenttypes', contenttypes),
+            ):
+                if rule and 'gender' in rule:
+                    gendered = rule['gender'].get(rules.get(f'{name}.gender', 'other'))
+                    if type(gendered) == str:
+                        rendered = gendered % {
+                            f'{param_names[0]}.accusative': rules.get(f'{name_plural}.accusative', translation_plural),
+                            f'{param_names[0]}': translation_plural,
+                        }
+                        shouldbeoutput += rendered + '\n'
+                    elif type(gendered) == dict:
+                        pass
+            current = Text()
+            current.append(entry.msgid + '\n', "bold")
+            current.append(entry.msgstr + '\n', "bold")
+            current.append('\n'.join(examples))
+            table.add_row(current, Pretty(rule), shouldbeoutput)
+    console.print(table)
 
-print('names of placeholders with count of their occurrence:', c)
+console.print('names of placeholders with count of their occurrence:', str(c))
