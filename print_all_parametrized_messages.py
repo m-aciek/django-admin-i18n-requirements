@@ -56,21 +56,21 @@ for package, domain in (
             (package, 'django')
             for package in (
                 'contrib/admin',
-                'contrib/admindocs',
-                'contrib/auth',
-                'contrib/contenttypes',
-                'contrib/flatpages',
-                'contrib/gis',
-                'contrib/humanize',
-                'contrib/postgres',
-                'contrib/redirects',
-                'contrib/sessions',
-                'contrib/sites',
-                'conf',
+                # 'contrib/admindocs',
+                # 'contrib/auth',
+                # 'contrib/contenttypes',
+                # 'contrib/flatpages',
+                # 'contrib/gis',
+                # 'contrib/humanize',
+                # 'contrib/postgres',
+                # 'contrib/redirects',
+                # 'contrib/sessions',
+                # 'contrib/sites',
+                # 'conf',
             )
         )
     )
-    + (('contrib/admin', 'djangojs'),)
+    # + (('contrib/admin', 'djangojs'),)
 ):
     pofile = polib.pofile(f'{django_clone_path}/django/{package}/locale/{language}/LC_MESSAGES/{domain}.po')
     pofile_en = polib.pofile(f'{django_clone_path}/django/{package}/locale/en/LC_MESSAGES/{domain}.po')
@@ -99,16 +99,16 @@ for package, domain in (
             rule = rules.get(entry.msgid)
             if not rule:
                 shouldbeoutput += 'no need to enhance'
-            for name, name_plural, translation_plural in (
-                ('user', 'users', users),
-                ('group', 'groups', groups),
-                ('permission', 'permissions', permissions),
-                ('session', 'sessions', sessions),
-                ('site', 'sites', sites),
-                ('redirect', 'redirects', redirects),
-                ('flat page', 'flatpages', flatpages),
-                ('log entry', 'logentries', logentries),
-                ('content type', 'contenttypes', contenttypes),
+            for name, name_plural, translation_plural, translation_singular in (
+                ('user', 'users', users, user),
+                ('group', 'groups', groups, group),
+                ('permission', 'permissions', permissions, permission),
+                ('session', 'sessions', sessions, session),
+                ('site', 'sites', sites, site),
+                ('redirect', 'redirects', redirects, redirect),
+                ('flat page', 'flatpages', flatpages, flatpage),
+                ('log entry', 'logentries', logentries, logentry),
+                ('content type', 'contenttypes', contenttypes, contenttype),
             ):
                 if rule and 'gender' in rule:
                     gendered = rule['gender'].get(rules.get(f'{name}.gender', 'other'))
@@ -119,7 +119,22 @@ for package, domain in (
                         }
                         shouldbeoutput += rendered + '\n'
                     elif type(gendered) == dict:
-                        pass
+                        if 'plurals' in gendered:
+                            for n, category in ((1, 'one'), (2, 'few'), (5, 'many')):
+                                pluralized = gendered['plurals'][category]
+                                rendered = pluralized % {
+                                    'count': n,
+                                    f'{param_names[0]}.genitive': rules.get(
+                                        f'{name_plural if n != 1 else name}.genitive',
+                                        translation_plural if n != 1 else translation_singular,
+                                    ),
+                                    f'{param_names[0]}.accusative': rules.get(
+                                        f'{name_plural if n != 1 else name}.accusative',
+                                        translation_plural if n != 1 else translation_singular,
+                                    ),
+                                    param_names[0]: translation_plural if n != 1 else translation_singular,
+                                }
+                                shouldbeoutput += rendered + '\n'
             current = Text()
             current.append('\n'.join(f'{path}:{line}' for path, line in entry_en.occurrences) + '\n')
             current.append(entry.msgid + '\n', "bold")
