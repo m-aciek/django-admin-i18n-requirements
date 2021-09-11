@@ -85,9 +85,10 @@ for package, domain in (
             c.update(param_names)
             examples = []
             if param_names[0] == 'verbose_name_plural':
-                for model in plurals:
+                parameters = [{'verbose_name_plural': model} for model in plurals]
+                for example in parameters:
                     try:
-                        examples.append(entry.msgstr % {param_names[0]: model})
+                        examples.append(entry.msgstr % example)
                     except KeyError:
                         pass
             if param_names[0] == 'items':
