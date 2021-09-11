@@ -32,6 +32,16 @@
 'flat page.genitive' = 'strony statycznej'
 'log entry.genitive' = 'logu'
 'content type.genitive' = 'typu zawartości'
+'user.gender' = 'masculine animate'
+'group.gender' = 'feminine'
+'permission.gender' = 'neuter'
+'session.gender' = 'feminine'
+'site.gender' = 'feminine'
+'redirect.gender' = 'neuter'
+'redirect.accusative' = 'przekierowanie'
+'flat page.gender' = 'feminine'
+'log entry.gender' = 'masculine inanimate'
+'content type.gender' = 'masculine inanimate'
 
 ['Delete selected %(verbose_name_plural)s'.'gender:verbose_name_plural']
 'masculine personal' = 'Usuń wybranych %(verbose_name_plural.accusative)s'

@@ -155,6 +155,12 @@ for package, domain in (
                     examples.append(entry.msgstr % {'verbose_name_plural': translation})
                 for key, translation in placeables:
                     shouldbeexamples.append(parse(rule, verbose_name_plural=(key, translation)))
+            if param_names[0] == 'verbose_name':
+                placeables = singulars
+                for key, translation in placeables:
+                    examples.append(entry.msgstr % {'verbose_name': translation})
+                for key, translation in placeables:
+                    shouldbeexamples.append(parse(rule, verbose_name=(key, translation)))
             if param_names[0] == 'items':
                 placeables = []
                 for singular, plural in zip(singulars, plurals):
@@ -179,7 +185,7 @@ for package, domain in (
                     shouldbeexamples.append(parse(rule, **placeable))
             shouldbeoutput = ''
             if not rule:
-                shouldbeoutput += 'no need to enhance'
+                shouldbeoutput += 'no need to enhance or not parametrized with models verbose name'
             if shouldbeexamples:
                 shouldbeoutput = '\n'.join(shouldbeexamples)
             current = Text()
