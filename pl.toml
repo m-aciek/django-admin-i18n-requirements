@@ -7,7 +7,7 @@
 'View %s' = 'Obejrzyj %(.accusative)s'
 'Deleting %(class_name)s %(instance)s would require deleting the following protected related objects: %(related_objects)s' = 'Usunięcie %(class_name.genitive)s %(instance)s może wiązać się z usunięciem następujących chronionych obiektów pokrewnych: %(related_objects)s'
 
-'user.gender' = 'masculine personal'
+'users.gender' = 'masculine personal'
 'users.accusative' = 'użytkowników'
 'user.accusative' = 'użytkownika'
 'users.genitive' = 'użytkowników'

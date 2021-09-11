@@ -47,9 +47,23 @@ contenttype = contenttypes_file.find('content type').msgstr
 contenttypes = contenttypes_file.find('content types').msgstr
 singulars = (user, group, permission, session, site, redirect, flatpage, logentry, contenttype)
 plurals = (users, groups, permissions, sessions, sites, redirects, flatpages, logentries, contenttypes)
-c = Counter()
+c: Counter = Counter()
 
 console = Console()
+
+
+def translate(msgid: str, key: str, translation: str, param_name: str) -> str:
+    rule = rules.get(msgid)
+    if rule and 'gender' in rule:
+        gendered = rule['gender'].get(rules.get(f'{key}.gender', 'other'))
+        if type(gendered) == str:
+            rendered = gendered % {
+                param_name: translation,
+                f'{param_name}.accusative': rules.get(f'{key}.accusative', translation),
+            }
+            return rendered
+
+
 for package, domain in (
     tuple(
         (
@@ -84,10 +98,23 @@ for package, domain in (
             param_names = [match[1] or match[2] for match in match_groups]
             c.update(param_names)
             examples = []
+            shouldbeexamples = []
             if param_names[0] == 'verbose_name_plural':
-                parameters = [{'verbose_name_plural': model} for model in plurals]
-                for example in parameters:
-                    examples.append(entry.msgstr % example)
+                placeables = [
+                    ('users', users),
+                    ('groups', groups),
+                    ('permissions', permissions),
+                    ('sessions', sessions),
+                    ('sites', sites),
+                    ('redirects', redirects),
+                    ('flat pages', flatpages),
+                    ('log entries', logentries),
+                    ('content types', contenttypes),
+                ]
+                for key, translation in placeables:
+                    examples.append(entry.msgstr % {'verbose_name_plural': translation})
+                for key, translation in placeables:
+                    shouldbeexamples.append(translate(entry.msgid, key, translation, 'verbose_name_plural'))
             if param_names[0] == 'items':
                 for singular, plural in zip(singulars, plurals):
                     examples.append(entry.msgstr % {'count': 1, 'items': singular})
@@ -102,42 +129,47 @@ for package, domain in (
             rule = rules.get(entry.msgid)
             if not rule:
                 shouldbeoutput += 'no need to enhance'
-            for name, name_plural, translation_plural, translation_singular in (
-                ('user', 'users', users, user),
-                ('group', 'groups', groups, group),
-                ('permission', 'permissions', permissions, permission),
-                ('session', 'sessions', sessions, session),
-                ('site', 'sites', sites, site),
-                ('redirect', 'redirects', redirects, redirect),
-                ('flat page', 'flatpages', flatpages, flatpage),
-                ('log entry', 'logentries', logentries, logentry),
-                ('content type', 'contenttypes', contenttypes, contenttype),
-            ):
-                if rule and 'gender' in rule:
-                    gendered = rule['gender'].get(rules.get(f'{name}.gender', 'other'))
-                    if type(gendered) == str:
-                        rendered = gendered % {
-                            f'{param_names[0]}.accusative': rules.get(f'{name_plural}.accusative', translation_plural),
-                            f'{param_names[0]}': translation_plural,
-                        }
-                        shouldbeoutput += rendered + '\n'
-                    elif type(gendered) == dict:
-                        if 'plurals' in gendered:
-                            for n, category in ((1, 'one'), (2, 'few'), (5, 'many')):
-                                pluralized = gendered['plurals'][category]
-                                rendered = pluralized % {
-                                    'count': n,
-                                    f'{param_names[0]}.genitive': rules.get(
-                                        f'{name_plural if n != 1 else name}.genitive',
-                                        translation_plural if n != 1 else translation_singular,
-                                    ),
-                                    f'{param_names[0]}.accusative': rules.get(
-                                        f'{name_plural if n != 1 else name}.accusative',
-                                        translation_plural if n != 1 else translation_singular,
-                                    ),
-                                    param_names[0]: translation_plural if n != 1 else translation_singular,
-                                }
-                                shouldbeoutput += rendered + '\n'
+            if shouldbeexamples:
+                shouldbeoutput = '\n'.join(shouldbeexamples)
+            else:
+                for name, name_plural, translation_plural, translation_singular in (
+                    ('user', 'users', users, user),
+                    ('group', 'groups', groups, group),
+                    ('permission', 'permissions', permissions, permission),
+                    ('session', 'sessions', sessions, session),
+                    ('site', 'sites', sites, site),
+                    ('redirect', 'redirects', redirects, redirect),
+                    ('flat page', 'flatpages', flatpages, flatpage),
+                    ('log entry', 'logentries', logentries, logentry),
+                    ('content type', 'contenttypes', contenttypes, contenttype),
+                ):
+                    if rule and 'gender' in rule:
+                        gendered = rule['gender'].get(rules.get(f'{name}.gender', 'other'))
+                        if type(gendered) == str:
+                            rendered = gendered % {
+                                f'{param_names[0]}.accusative': rules.get(
+                                    f'{name_plural}.accusative', translation_plural
+                                ),
+                                f'{param_names[0]}': translation_plural,
+                            }
+                            shouldbeoutput += rendered + '\n'
+                        elif type(gendered) == dict:
+                            if 'plurals' in gendered:
+                                for n, category in ((1, 'one'), (2, 'few'), (5, 'many')):
+                                    pluralized = gendered['plurals'][category]
+                                    rendered = pluralized % {
+                                        'count': n,
+                                        f'{param_names[0]}.genitive': rules.get(
+                                            f'{name_plural if n != 1 else name}.genitive',
+                                            translation_plural if n != 1 else translation_singular,
+                                        ),
+                                        f'{param_names[0]}.accusative': rules.get(
+                                            f'{name_plural if n != 1 else name}.accusative',
+                                            translation_plural if n != 1 else translation_singular,
+                                        ),
+                                        param_names[0]: translation_plural if n != 1 else translation_singular,
+                                    }
+                                    shouldbeoutput += rendered + '\n'
             current = Text()
             current.append('\n'.join(f'{path}:{line}' for path, line in entry_en.occurrences) + '\n')
             current.append(entry.msgid + '\n', "bold")
