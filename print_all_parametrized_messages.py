@@ -45,23 +45,72 @@ contenttypes_file = polib.pofile(
 )
 contenttype = contenttypes_file.find('content type').msgstr
 contenttypes = contenttypes_file.find('content types').msgstr
-singulars = (user, group, permission, session, site, redirect, flatpage, logentry, contenttype)
-plurals = (users, groups, permissions, sessions, sites, redirects, flatpages, logentries, contenttypes)
+singulars = [
+    ('user', user),
+    ('group', group),
+    ('permission', permission),
+    ('session', session),
+    ('site', site),
+    ('reditect', redirect),
+    ('flat page', flatpage),
+    ('log entry', logentry),
+    ('content type', contenttype),
+]
+plurals = [
+    ('users', users),
+    ('groups', groups),
+    ('permissions', permissions),
+    ('sessions', sessions),
+    ('sites', sites),
+    ('redirects', redirects),
+    ('flat pages', flatpages),
+    ('log entries', logentries),
+    ('content types', contenttypes),
+]
 c: Counter = Counter()
 
 console = Console()
 
 
-def translate(msgid: str, key: str, translation: str, param_name: str) -> str:
-    rule = rules.get(msgid)
-    if rule and 'gender' in rule:
-        gendered = rule['gender'].get(rules.get(f'{key}.gender', 'other'))
-        if type(gendered) == str:
-            rendered = gendered % {
-                param_name: translation,
-                f'{param_name}.accusative': rules.get(f'{key}.accusative', translation),
+def n_to_category(n):
+    if n == 1:
+        return 'one'
+    if 1 < n % 10 < 5 and (10 > n % 100 or n % 100 > 20):
+        return 'few'
+    return 'many'
+
+
+def parse(rule: str, **translated_parameters) -> str:
+    prepared_parameters = {}
+    for param, value in translated_parameters.items():
+        if isinstance(value, tuple):
+            prepared_parameters |= {
+                param: value[1],
+                f'{param}.accusative': rules.get(f'{value[0]}.accusative', value[1]),
+                f'{param}.genitive': rules.get(f'{value[0]}.genitive', value[1]),
             }
-            return rendered
+        else:
+            prepared_parameters |= {param: value}
+    if rule:
+        if isinstance(rule, str):
+            return rule % prepared_parameters
+        for element in rule:
+            if match := re.match('gender:(.*)', element):
+                flection_param = match.group(1)
+                key = translated_parameters[flection_param][0]
+                gendered = rule[element].get(rules.get(f'{key}.gender', 'other'))
+                if type(gendered) == str:
+                    rendered = gendered % prepared_parameters
+                    return rendered
+                else:
+                    return parse(gendered, **translated_parameters)
+            if match := re.match('plurals:(.*)', element):
+                flection_param = match.group(1)
+                category = n_to_category(translated_parameters[flection_param])
+                pluralized = rule[element][category]
+                rendered = pluralized % prepared_parameters
+                return rendered
+    return ''
 
 
 for package, domain in (
@@ -99,34 +148,36 @@ for package, domain in (
             c.update(param_names)
             examples = []
             shouldbeexamples = []
+            rule = rules.get(entry.msgid)
             if param_names[0] == 'verbose_name_plural':
-                placeables = [
-                    ('users', users),
-                    ('groups', groups),
-                    ('permissions', permissions),
-                    ('sessions', sessions),
-                    ('sites', sites),
-                    ('redirects', redirects),
-                    ('flat pages', flatpages),
-                    ('log entries', logentries),
-                    ('content types', contenttypes),
-                ]
+                placeables = plurals
                 for key, translation in placeables:
                     examples.append(entry.msgstr % {'verbose_name_plural': translation})
                 for key, translation in placeables:
-                    shouldbeexamples.append(translate(entry.msgid, key, translation, 'verbose_name_plural'))
+                    shouldbeexamples.append(parse(rule, verbose_name_plural=(key, translation)))
             if param_names[0] == 'items':
+                placeables = []
                 for singular, plural in zip(singulars, plurals):
-                    examples.append(entry.msgstr % {'count': 1, 'items': singular})
-                    examples.append(entry.msgstr % {'count': 2, 'items': plural})
-                    examples.append(entry.msgstr % {'count': 5, 'items': plural})
+                    placeables.append({'count': 1, 'items': singular})
+                    placeables.append({'count': 2, 'items': plural})
+                    placeables.append({'count': 5, 'items': plural})
+                for placeable in placeables:
+                    examples.append(entry.msgstr % {'count': placeable['count'], 'items': placeable['items'][1]})
+                for placeable in placeables:
+                    shouldbeexamples.append(parse(rule, count=placeable['count'], items=placeable['items']))
             if param_names[0] == 'name':
+                placeables = []
                 for singular in singulars:
-                    examples.append(entry.msgstr % {'name': singular, 'obj': 'maciek', 'key': 1})
+                    placeables.append({'name': singular, 'obj': 'maciek', 'key': 1})
                 for plural in plurals:
-                    examples.append(entry.msgstr % {'name': plural, 'obj': 'maciek', 'key': 1})
+                    placeables.append({'name': plural, 'obj': 'maciek', 'key': 1})
+                for placeable in placeables:
+                    examples.append(
+                        entry.msgstr % {'obj': placeable['obj'], 'name': placeable['name'][1], 'key': placeable['key']}
+                    )
+                for placeable in placeables:
+                    shouldbeexamples.append(parse(rule, **placeable))
             shouldbeoutput = ''
-            rule = rules.get(entry.msgid)
             if not rule:
                 shouldbeoutput += 'no need to enhance'
             if shouldbeexamples:
@@ -154,32 +205,13 @@ for package, domain in (
                             }
                             shouldbeoutput += rendered + '\n'
                         elif type(gendered) == dict:
-                            if 'plurals' in gendered:
-                                for n, category in ((1, 'one'), (2, 'few'), (5, 'many')):
-                                    pluralized = gendered['plurals'][category]
-                                    rendered = pluralized % {
-                                        'count': n,
-                                        f'{param_names[0]}.genitive': rules.get(
-                                            f'{name_plural if n != 1 else name}.genitive',
-                                            translation_plural if n != 1 else translation_singular,
-                                        ),
-                                        f'{param_names[0]}.accusative': rules.get(
-                                            f'{name_plural if n != 1 else name}.accusative',
-                                            translation_plural if n != 1 else translation_singular,
-                                        ),
-                                        param_names[0]: translation_plural if n != 1 else translation_singular,
-                                    }
-                                    shouldbeoutput += rendered + '\n'
+                            pass
             current = Text()
             current.append('\n'.join(f'{path}:{line}' for path, line in entry_en.occurrences) + '\n')
             current.append(entry.msgid + '\n', "bold")
             current.append(entry.msgstr + '\n', "bold")
             current.append('\n'.join(examples))
-            table.add_row(
-                current,
-                Pretty(rule),
-                shouldbeoutput,
-            )
+            table.add_row(current, Pretty(rule), shouldbeoutput)
     console.print(table)
 
 console.print('names of placeholders with count of their occurrence:', str(c))

@@ -19,92 +19,101 @@
 'site.accusative' = 'stronę'
 'sites.genitive' = 'stron'
 'redirects.genitive' = 'przekierowań'
-'flatpage.accusative' = 'stronę statyczną'
-'flatpages.genitive' = 'stron statycznych'
-'logentries.genitive' = 'logów'
-'contenttypes.genitive' = 'typów zawartości'
+'flat page.accusative' = 'stronę statyczną'
+'flat pages.genitive' = 'stron statycznych'
+'log entries.genitive' = 'logów'
+'content types.genitive' = 'typów zawartości'
+'user.genitive' = 'użytkownika'
+'group.genitive' = 'grupy'
+'permission.genitive' = 'uprawnienia'
+'session.genitive' = 'sesji'
+'site.genitive' = 'strony'
+'redirect.genitive' = 'przekierowania'
+'flat page.genitive' = 'strony statycznej'
+'log entry.genitive' = 'logu'
+'content type.genitive' = 'typu zawartości'
 
-['Delete selected %(verbose_name_plural)s'.gender]
+['Delete selected %(verbose_name_plural)s'.'gender:verbose_name_plural']
 'masculine personal' = 'Usuń wybranych %(verbose_name_plural.accusative)s'
 'other' = 'Usuń wybrane %(verbose_name_plural.accusative)s'
 
-['Successfully deleted %(count)d %(items)s.'.gender.'masculine personal'.plurals]
+['Successfully deleted %(count)d %(items)s.'.'gender:items'.'masculine personal'.'plurals:count']
 one = 'Pomyślnie usunięto %(count)d %(items.accusative)s.'
 few = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
 many = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
 other = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
-['Successfully deleted %(count)d %(items)s.'.gender.'other'.plurals]
+['Successfully deleted %(count)d %(items)s.'.'gender:items'.'other'.'plurals:count']
 one = 'Pomyślnie usunięto %(count)d %(items.accusative)s.'
 few = 'Pomyślnie usunięto %(count)d %(items)s.'
 many = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
 other = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
 
-['Add another %(verbose_name)s'.gender]
+['Add another %(verbose_name)s'.'gender:verbose_name']
 'masculine animate' = 'Dodaj kolejnego %(verbose_name.accusative)s'
 'masculine inanimate' = 'Dodaj kolejny %(verbose_name.accusative)s'
 'feminine' = 'Dodaj kolejną %(verbose_name.accusative)s'
 'neuter' = 'Dodaj kolejne %(verbose_name.accusative)s'
 
-['The {name} “{obj}” was added successfully.'.gender]
+['The {name} “{obj}” was added successfully.'.'gender:name']
 masculine = '{name} „{obj}” został dodany pomyślnie.'
 feminine = '{name} „{obj}” została dodana pomyślnie.'
 neuter = '{name} „{obj}” zostało dodane pomyślnie.'
 
-['The {name} “{obj}” was added successfully. You may add another {name} below.'.gender]
+['The {name} “{obj}” was added successfully. You may add another {name} below.'.'gender:name']
 'masculine animate' = '{name} „{obj}” został dodany pomyślnie. Można dodać kolejnego {name.accusative} poniżej.'
 'masculine inanimate' = '{name} „{obj}” został dodany pomyślnie. Można dodać kolejny {name.accusative} poniżej.'
 'feminine' = '{name} „{obj}” została dodana pomyślnie. Można dodać kolejną {name.accusative} poniżej.'
 'neuter' = '{name} „{obj}” zostało dodane pomyślnie. Można dodać kolejne {name.accusative} poniżej.'
 
-['The {name} “{obj}” was changed successfully. You may edit it again below.'.gender]
+['The {name} “{obj}” was changed successfully. You may edit it again below.'.'gender:name']
 masculine = '{name} „{obj}” został pomyślnie zmieniony. Można edytować go ponownie poniżej.'
 feminine = '{name} „{obj}” została pomyślnie zmieniona. Można edytować ją ponownie poniżej.'
 neuter = '{name} „{obj}” zostało pomyślnie zmienione. Można edytować je ponownie poniżej.'
 
-['The {name} “{obj}” was added successfully. You may edit it again below.'.gender]
+['The {name} “{obj}” was added successfully. You may edit it again below.'.'gender:name']
 masculine = '{name} „{obj}” został dodany pomyślnie. Można edytować go ponownie poniżej.'
 feminine = '{name} „{obj}” została dodana pomyślnie. Można edytować ją ponownie poniżej.'
 neuter = '{name} „{obj}” zostało dodane pomyślnie. Można edytować je ponownie poniżej.'
 
-['The {name} “{obj}” was changed successfully. You may add another {name} below.'.gender]
+['The {name} “{obj}” was changed successfully. You may add another {name} below.'.'gender:name']
 'masculine animate' = '{name} „{obj}” został pomyślnie zmieniony. Można dodać kolejnego {name.accusative} poniżej.'
 'masculine inanimate' = '{name} „{obj}” został pomyślnie zmieniony. Można dodać kolejny {name.accusative} poniżej.'
 'feminine' = '{name} „{obj}” została pomyślnie zmieniona. Można dodać kolejną {name.accusative} poniżej.'
 'neuter' = '{name} „{obj}” zostało pomyślnie zmienione. Można dodać kolejne {name.accusative} poniżej.'
 
-['The {name} “{obj}” was changed successfully.'.gender]
+['The {name} “{obj}” was changed successfully.'.'gender:name']
 masculine = '{name} „{obj}” został pomyślnie zmieniony.'
 feminine = '{name} „{obj}” została pomyślnie zmieniona.'
 neuter = '{name} „{obj}” zostało pomyślnie zmienione.'
 
-['The %(name)s “%(obj)s” was deleted successfully.'.gender]
+['The %(name)s “%(obj)s” was deleted successfully.'.'gender:name']
 masculine = '%(name)s „%(obj)s” usunięty pomyślnie.'
 feminine = '%(name)s „%(obj)s” usunięta pomyślnie.'
 neuter = '%(name)s „%(obj)s” usunięte pomyślnie.'
 
-['%(name)s with ID “%(key)s” doesn’t exist. Perhaps it was deleted?'.gender]
+['%(name)s with ID “%(key)s” doesn’t exist. Perhaps it was deleted?'.'gender:name']
 masculine = '%(name)s z ID „%(key)s” nie istnieje. Może został usunięty?'
 feminine = '%(name)s z ID „%(key)s” nie istnieje. Może została usunięta?'
 neuter = '%(name)s z ID „%(key)s” nie istnieje. Może zostało usunięte?'
 
-['%(count)s %(name)s was changed successfully.'.plurals.one.gender]
+['%(count)s %(name)s was changed successfully.'.'plurals:count'.one.'gender:name']
 masculine = '%(count)s %(name)s został pomyślnie zmieniony.'
 feminine = '%(count)s %(name)s została pomyślnie zmieniona.'
 neuter = '%(count)s %(name)s zostało pomyślnie zmienione.'
 
-['%(count)s %(name)s was changed successfully.'.plurals.few.gender]
+['%(count)s %(name)s was changed successfully.'.'plurals:count'.few.'gender:name']
 'masculine personal' = '%(count)s %(name.genitive)s zostało pomyślnie zmienionych.'
 'other' = '%(count)s %(name)s zostały pomyślnie zmienione.'
 
-['%(count)s %(name)s was changed successfully.'.plurals]
+['%(count)s %(name)s was changed successfully.'.'plurals:count']
 many = '%(count)s %(name.genitive)s zostało pomyślnie zmienionych.'
 other = '%(count)s %(name.genitive)s zostało pomyślnie zmienione.'
 
-['Select all %(total_count)s %(module_name)s'.plurals]
+['Select all %(total_count)s %(module_name)s'.'plurals:total_count']
 one = 'Wybierz %(total_count)s %(module_name)s'
-['Select all %(total_count)s %(module_name)s'.plurals.few.gender]
+['Select all %(total_count)s %(module_name)s'.'plurals:total_count'.few.'gender:module_name']
 'masculine personal' = 'Wybierz wszystkich %(total_count)s %(module_name.genitive)s'
 'other' = 'Wybierz wszystkie %(total_count)s %(module_name)s'
-['Select all %(total_count)s %(module_name)s'.plurals.many.gender]
+['Select all %(total_count)s %(module_name)s'.'plurals:total_count'.many.'gender:module_name']
 'masculine personal' = 'Wybierz wszystkich %(total_count)s %(module_name.genitive)s'
 'other' = 'Wybierz wszystkie %(total_count)s %(module_name.genitive)s'
