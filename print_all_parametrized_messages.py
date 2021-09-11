@@ -95,6 +95,11 @@ for package, domain in (
                     examples.append(entry.msgstr % {'count': 1, 'items': singular})
                     examples.append(entry.msgstr % {'count': 2, 'items': plural})
                     examples.append(entry.msgstr % {'count': 5, 'items': plural})
+            if param_names[0] == 'name':
+                for singular in singulars:
+                    examples.append(entry.msgstr % {'name': singular, 'obj': 'maciek', 'key': 1})
+                for plural in plurals:
+                    examples.append(entry.msgstr % {'name': plural, 'obj': 'maciek', 'key': 1})
             shouldbeoutput = ''
             rule = rules.get(entry.msgid)
             if not rule:
