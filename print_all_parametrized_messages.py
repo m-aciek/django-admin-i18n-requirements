@@ -182,30 +182,6 @@ for package, domain in (
                 shouldbeoutput += 'no need to enhance'
             if shouldbeexamples:
                 shouldbeoutput = '\n'.join(shouldbeexamples)
-            else:
-                for name, name_plural, translation_plural, translation_singular in (
-                    ('user', 'users', users, user),
-                    ('group', 'groups', groups, group),
-                    ('permission', 'permissions', permissions, permission),
-                    ('session', 'sessions', sessions, session),
-                    ('site', 'sites', sites, site),
-                    ('redirect', 'redirects', redirects, redirect),
-                    ('flat page', 'flatpages', flatpages, flatpage),
-                    ('log entry', 'logentries', logentries, logentry),
-                    ('content type', 'contenttypes', contenttypes, contenttype),
-                ):
-                    if rule and 'gender' in rule:
-                        gendered = rule['gender'].get(rules.get(f'{name}.gender', 'other'))
-                        if type(gendered) == str:
-                            rendered = gendered % {
-                                f'{param_names[0]}.accusative': rules.get(
-                                    f'{name_plural}.accusative', translation_plural
-                                ),
-                                f'{param_names[0]}': translation_plural,
-                            }
-                            shouldbeoutput += rendered + '\n'
-                        elif type(gendered) == dict:
-                            pass
             current = Text()
             current.append('\n'.join(f'{path}:{line}' for path, line in entry_en.occurrences) + '\n')
             current.append(entry.msgid + '\n', "bold")
