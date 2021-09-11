@@ -87,10 +87,7 @@ for package, domain in (
             if param_names[0] == 'verbose_name_plural':
                 parameters = [{'verbose_name_plural': model} for model in plurals]
                 for example in parameters:
-                    try:
-                        examples.append(entry.msgstr % example)
-                    except KeyError:
-                        pass
+                    examples.append(entry.msgstr % example)
             if param_names[0] == 'items':
                 for singular, plural in zip(singulars, plurals):
                     examples.append(entry.msgstr % {'count': 1, 'items': singular})
