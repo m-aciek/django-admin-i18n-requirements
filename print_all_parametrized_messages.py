@@ -10,7 +10,7 @@ from rich.pretty import Pretty
 from rich.table import Table
 from rich.text import Text
 
-django_clone_path = '/Users/maciek/projects/django'
+django_clone_path = argv[2]
 try:
     language = argv[1]
 except IndexError:
