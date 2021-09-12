@@ -32,7 +32,7 @@
 'flat page.genitive' = 'strony statycznej'
 'log entry.genitive' = 'logu'
 'content type.genitive' = 'typu zawartości'
-'user.gender' = 'masculine animate'
+'user.gender' = 'masculine personal'
 'group.gender' = 'feminine'
 'permission.gender' = 'neuter'
 'session.gender' = 'feminine'
@@ -59,6 +59,7 @@ many = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
 other = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
 
 ['Add another %(verbose_name)s'.'gender:verbose_name']
+'masculine personal' = 'Dodaj kolejnego %(verbose_name.accusative)s'
 'masculine animate' = 'Dodaj kolejnego %(verbose_name.accusative)s'
 'masculine inanimate' = 'Dodaj kolejny %(verbose_name.accusative)s'
 'feminine' = 'Dodaj kolejną %(verbose_name.accusative)s'
@@ -86,6 +87,7 @@ feminine = '{name} „{obj}” została dodana pomyślnie. Można edytować ją 
 neuter = '{name} „{obj}” zostało dodane pomyślnie. Można edytować je ponownie poniżej.'
 
 ['The {name} “{obj}” was changed successfully. You may add another {name} below.'.'gender:name']
+'masculine personal' = '{name} „{obj}” został pomyślnie zmieniony. Można dodać kolejnego {name.accusative} poniżej.'
 'masculine animate' = '{name} „{obj}” został pomyślnie zmieniony. Można dodać kolejnego {name.accusative} poniżej.'
 'masculine inanimate' = '{name} „{obj}” został pomyślnie zmieniony. Można dodać kolejny {name.accusative} poniżej.'
 'feminine' = '{name} „{obj}” została pomyślnie zmieniona. Można dodać kolejną {name.accusative} poniżej.'

@@ -51,7 +51,7 @@ singulars = [
     ('permission', permission),
     ('session', session),
     ('site', site),
-    ('reditect', redirect),
+    ('redirect', redirect),
     ('flat page', flatpage),
     ('log entry', logentry),
     ('content type', contenttype),
@@ -98,7 +98,7 @@ def parse(rule: str, **translated_parameters) -> str:
             if match := re.match('gender:(.*)', element):
                 flection_param = match.group(1)
                 key = translated_parameters[flection_param][0]
-                gendered = rule[element].get(rules.get(f'{key}.gender', 'other'))
+                gendered = rule[element].get(rules.get(f'{key}.gender', 'other'), rule[element].get('other'))
                 if type(gendered) == str:
                     rendered = gendered % prepared_parameters
                     return rendered
