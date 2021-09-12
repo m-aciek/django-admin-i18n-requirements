@@ -34,6 +34,7 @@ jobs:
     - uses: actions/checkout@master
       with:
         repository: django/django
+        path: django
     - name: Run script
       run: |
         python print_all_parametrized_messages.py pl django
