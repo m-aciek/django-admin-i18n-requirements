@@ -178,9 +178,20 @@ for package, domain in (
                 for plural in plurals:
                     placeables.append({'name': plural, 'obj': 'maciek', 'key': 1})
                 for placeable in placeables:
-                    examples.append(
-                        entry.msgstr % {'obj': placeable['obj'], 'name': placeable['name'][1], 'key': placeable['key']}
-                    )
+                    if 'python-format' in entry.flags:
+                        examples.append(
+                            entry.msgstr
+                            % {'obj': placeable['obj'], 'name': placeable['name'][1], 'key': placeable['key']}
+                        )
+                    elif 'python-brace-format' in entry.flags:
+                        examples.append(
+                            entry.msgstr.format(
+                                obj=placeable['obj'],
+                                object=placeable['obj'],
+                                name=placeable['name'][1],
+                                key=placeable['key'],
+                            )
+                        )
                 for placeable in placeables:
                     shouldbeexamples.append(parse(rule, **placeable))
             shouldbeoutput = ''
