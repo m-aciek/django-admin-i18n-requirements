@@ -5,6 +5,7 @@ from sys import argv
 import polib
 
 import toml
+import yaml
 from rich.console import Console
 from rich.pretty import Pretty
 from rich.table import Table
@@ -204,7 +205,7 @@ for package, domain in (
             current.append(entry.msgid + '\n', "bold")
             current.append(entry.msgstr + '\n', "bold")
             current.append('\n'.join(examples))
-            table.add_row(current, Pretty(rule), shouldbeoutput)
+            table.add_row(current, yaml.dump(rule, allow_unicode=True), shouldbeoutput)
     console.print(table)
 
 console.print('names of placeholders with count of their occurrence:', str(c))
