@@ -1,5 +1,5 @@
 import re
-from collections import Counter
+from collections import Counter, UserString
 from sys import argv
 
 import polib
@@ -81,12 +81,15 @@ def n_to_category(n):
     return 'many'
 
 
-def parse(rule: str, **translated_parameters) -> str:
+def parse(rule: str, python_brace_format: bool, **translated_parameters) -> str:
     prepared_parameters = {}
     for param, value in translated_parameters.items():
         if isinstance(value, tuple):
+            for_brace_param = UserString(value[1])
+            for_brace_param.accusative = rules.get(f'{value[0]}.accusative', value[1])
+            for_brace_param.genitive = rules.get(f'{value[0]}.genitive', value[1])
             prepared_parameters |= {
-                param: value[1],
+                param: for_brace_param,
                 f'{param}.accusative': rules.get(f'{value[0]}.accusative', value[1]),
                 f'{param}.genitive': rules.get(f'{value[0]}.genitive', value[1]),
             }
@@ -94,23 +97,30 @@ def parse(rule: str, **translated_parameters) -> str:
             prepared_parameters |= {param: value}
     if rule:
         if isinstance(rule, str):
-            return rule % prepared_parameters
+            if not python_brace_format:
+                return rule % prepared_parameters
+            return rule.format(**prepared_parameters)
         for element in rule:
             if match := re.match('gender:(.*)', element):
                 flection_param = match.group(1)
                 key = translated_parameters[flection_param][0]
                 gendered = rule[element].get(rules.get(f'{key}.gender', 'other'), rule[element].get('other'))
                 if type(gendered) == str:
-                    rendered = gendered % prepared_parameters
-                    return rendered
+                    if not python_brace_format:
+                        return gendered % prepared_parameters
+                    return gendered.format(**prepared_parameters)
                 else:
-                    return parse(gendered, **translated_parameters)
+                    return parse(gendered, python_brace_format, **translated_parameters)
             if match := re.match('plurals:(.*)', element):
                 flection_param = match.group(1)
                 category = n_to_category(translated_parameters[flection_param])
                 pluralized = rule[element][category]
-                rendered = pluralized % prepared_parameters
-                return rendered
+                if type(pluralized) == str:
+                    if not python_brace_format:
+                        return pluralized % prepared_parameters
+                    return pluralized.format(**prepared_parameters)
+                else:
+                    return parse(pluralized, python_brace_format, **translated_parameters)
     return ''
 
 
@@ -144,6 +154,7 @@ for package, domain in (
     table.add_column('enhanced translation')
     table.add_column('enhanced examples')
     for entry, entry_en in zip(pofile, pofile_en):
+        python_brace_format = 'python-brace-format' in entry.flags
         if match_groups := re.findall(r'%(\(([a-z_]+)\))?s|{([a-z_]*)}', entry.msgid):
             param_names = [match[1] or match[2] for match in match_groups]
             c.update(param_names)
@@ -155,13 +166,13 @@ for package, domain in (
                 for key, translation in placeables:
                     examples.append(entry.msgstr % {'verbose_name_plural': translation})
                 for key, translation in placeables:
-                    shouldbeexamples.append(parse(rule, verbose_name_plural=(key, translation)))
+                    shouldbeexamples.append(parse(rule, python_brace_format, verbose_name_plural=(key, translation)))
             if param_names[0] == 'verbose_name':
                 placeables = singulars
                 for key, translation in placeables:
                     examples.append(entry.msgstr % {'verbose_name': translation})
                 for key, translation in placeables:
-                    shouldbeexamples.append(parse(rule, verbose_name=(key, translation)))
+                    shouldbeexamples.append(parse(rule, python_brace_format, verbose_name=(key, translation)))
             if param_names[0] == 'items':
                 placeables = []
                 for singular, plural in zip(singulars, plurals):
@@ -171,30 +182,84 @@ for package, domain in (
                 for placeable in placeables:
                     examples.append(entry.msgstr % {'count': placeable['count'], 'items': placeable['items'][1]})
                 for placeable in placeables:
-                    shouldbeexamples.append(parse(rule, count=placeable['count'], items=placeable['items']))
-            if param_names[0] == 'name':
+                    shouldbeexamples.append(
+                        parse(rule, python_brace_format, count=placeable['count'], items=placeable['items'])
+                    )
+            if param_names == ['name']:
                 placeables = []
                 for singular in singulars:
                     placeables.append({'name': singular, 'obj': 'maciek', 'key': 1})
                 for plural in plurals:
                     placeables.append({'name': plural, 'obj': 'maciek', 'key': 1})
                 for placeable in placeables:
-                    if 'python-format' in entry.flags:
-                        examples.append(
-                            entry.msgstr
-                            % {'obj': placeable['obj'], 'name': placeable['name'][1], 'key': placeable['key']}
-                        )
-                    elif 'python-brace-format' in entry.flags:
-                        examples.append(
-                            entry.msgstr.format(
-                                obj=placeable['obj'],
-                                object=placeable['obj'],
-                                name=placeable['name'][1],
-                                key=placeable['key'],
-                            )
-                        )
+                    # if 'python-format' in entry.flags:
+                    examples.append(
+                        entry.msgstr % {'obj': placeable['obj'], 'name': placeable['name'][1], 'key': placeable['key']}
+                    )
+                    # elif 'python-brace-format' in entry.flags:
                 for placeable in placeables:
-                    shouldbeexamples.append(parse(rule, **placeable))
+                    shouldbeexamples.append(parse(rule, python_brace_format, **placeable))
+            if param_names == ['name', 'object']:
+                placeables = [{'name': singular, 'object': 'maciek'} for singular in singulars]
+                for placeable in placeables:
+                    examples.append(entry.msgstr.format(name=placeable['name'][1], object=placeable['object']))
+                for placeable in placeables:
+                    shouldbeexamples.append(parse(rule, python_brace_format, **placeable))
+            if param_names == ['fields', 'name', 'object']:
+                placeables = [{'name': singular, 'fields': 'username', 'object': 'maciek'} for singular in singulars]
+                for placeable in placeables:
+                    examples.append(
+                        entry.msgstr.format(
+                            name=placeable['name'][1], fields=placeable['fields'], object=placeable['object']
+                        )
+                    )
+                for placeable in placeables:
+                    shouldbeexamples.append(parse(rule, python_brace_format, **placeable))
+            if param_names == ['name', 'obj']:
+                placeables = [{'name': singular, 'obj': 'maciek'} for singular in singulars]
+                for placeable in placeables:
+                    if python_brace_format:
+                        examples.append(entry.msgstr.format(name=placeable['name'][1], obj=placeable['obj']))
+                    else:
+                        examples.append(entry.msgstr % {'name': placeable['name'][1], 'obj': placeable['obj']})
+                for placeable in placeables:
+                    shouldbeexamples.append(parse(rule, python_brace_format, **placeable))
+            if param_names == ['name', 'obj', 'name']:
+                placeables = [{'name': singular, 'obj': 'maciek'} for singular in singulars]
+                for placeable in placeables:
+                    examples.append(entry.msgstr.format(name=placeable['name'][1], obj=placeable['obj']))
+                for placeable in placeables:
+                    shouldbeexamples.append(parse(rule, python_brace_format, **placeable))
+            if param_names == ['name', 'key']:
+                placeables = [{'name': singular, 'key': 'maciek'} for singular in singulars]
+                for placeable in placeables:
+                    if python_brace_format:
+                        examples.append(entry.msgstr.format(name=placeable['name'][1], key=placeable['key']))
+                    else:
+                        examples.append(entry.msgstr % {'name': placeable['name'][1], 'key': placeable['key']})
+                for placeable in placeables:
+                    shouldbeexamples.append(parse(rule, python_brace_format, **placeable))
+            if param_names == ['']:
+                placeables = [{'': singular} for singular in singulars]
+                for placeable in placeables:
+                    if python_brace_format:
+                        examples.append(entry.msgstr.format(placeable[''][1]))
+                    else:
+                        examples.append(entry.msgstr % (placeable[''][1],))
+                for placeable in placeables:
+                    shouldbeexamples.append(parse(rule, python_brace_format, **placeable))
+            if param_names == ['count', 'name']:
+                placeables = []
+                for singular, plural in zip(singulars, plurals):
+                    placeables.append({'count': 1, 'name': singular})
+                    placeables.append({'count': 2, 'name': plural})
+                    placeables.append({'count': 5, 'name': plural})
+                for placeable in placeables:
+                    examples.append(entry.msgstr % {'count': placeable['count'], 'name': placeable['name'][1]})
+                for placeable in placeables:
+                    shouldbeexamples.append(
+                        parse(rule, python_brace_format, count=placeable['count'], name=placeable['name'])
+                    )
             shouldbeoutput = ''
             if not rule:
                 shouldbeoutput += 'no need to enhance or not parametrized with models verbose name'

@@ -67,6 +67,8 @@ other = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
 
 ['The {name} “{obj}” was added successfully.'.'gender:name']
 masculine = '{name} „{obj}” został dodany pomyślnie.'
+'masculine inanimate' = '{name} „{obj}” został dodany pomyślnie.'
+'masculine personal' = '{name} „{obj}” został dodany pomyślnie.'
 feminine = '{name} „{obj}” została dodana pomyślnie.'
 neuter = '{name} „{obj}” zostało dodane pomyślnie.'
 
