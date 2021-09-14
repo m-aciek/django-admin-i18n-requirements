@@ -73,18 +73,23 @@ feminine = '{name} „{obj}” została dodana pomyślnie.'
 neuter = '{name} „{obj}” zostało dodane pomyślnie.'
 
 ['The {name} “{obj}” was added successfully. You may add another {name} below.'.'gender:name']
+'masculine personal' = '{name} „{obj}” został dodany pomyślnie. Można dodać kolejnego {name.accusative} poniżej.'
 'masculine animate' = '{name} „{obj}” został dodany pomyślnie. Można dodać kolejnego {name.accusative} poniżej.'
 'masculine inanimate' = '{name} „{obj}” został dodany pomyślnie. Można dodać kolejny {name.accusative} poniżej.'
 'feminine' = '{name} „{obj}” została dodana pomyślnie. Można dodać kolejną {name.accusative} poniżej.'
 'neuter' = '{name} „{obj}” zostało dodane pomyślnie. Można dodać kolejne {name.accusative} poniżej.'
 
 ['The {name} “{obj}” was changed successfully. You may edit it again below.'.'gender:name']
-masculine = '{name} „{obj}” został pomyślnie zmieniony. Można edytować go ponownie poniżej.'
+'masculine personal' = '{name} „{obj}” został pomyślnie zmieniony. Można edytować go ponownie poniżej.'
+'masculine animate' = '{name} „{obj}” został pomyślnie zmieniony. Można edytować go ponownie poniżej.'
+'masculine inanimate' = '{name} „{obj}” został pomyślnie zmieniony. Można edytować go ponownie poniżej.'
 feminine = '{name} „{obj}” została pomyślnie zmieniona. Można edytować ją ponownie poniżej.'
 neuter = '{name} „{obj}” zostało pomyślnie zmienione. Można edytować je ponownie poniżej.'
 
 ['The {name} “{obj}” was added successfully. You may edit it again below.'.'gender:name']
-masculine = '{name} „{obj}” został dodany pomyślnie. Można edytować go ponownie poniżej.'
+'masculine personal' = '{name} „{obj}” został dodany pomyślnie. Można edytować go ponownie poniżej.'
+'masculine animate' = '{name} „{obj}” został dodany pomyślnie. Można edytować go ponownie poniżej.'
+'masculine inanimate' = '{name} „{obj}” został dodany pomyślnie. Można edytować go ponownie poniżej.'
 feminine = '{name} „{obj}” została dodana pomyślnie. Można edytować ją ponownie poniżej.'
 neuter = '{name} „{obj}” zostało dodane pomyślnie. Można edytować je ponownie poniżej.'
 
@@ -96,22 +101,30 @@ neuter = '{name} „{obj}” zostało dodane pomyślnie. Można edytować je pon
 'neuter' = '{name} „{obj}” zostało pomyślnie zmienione. Można dodać kolejne {name.accusative} poniżej.'
 
 ['The {name} “{obj}” was changed successfully.'.'gender:name']
-masculine = '{name} „{obj}” został pomyślnie zmieniony.'
+'masculine personal' = '{name} „{obj}” został pomyślnie zmieniony.'
+'masculine animate' = '{name} „{obj}” został pomyślnie zmieniony.'
+'masculine inanimate' = '{name} „{obj}” został pomyślnie zmieniony.'
 feminine = '{name} „{obj}” została pomyślnie zmieniona.'
 neuter = '{name} „{obj}” zostało pomyślnie zmienione.'
 
 ['The %(name)s “%(obj)s” was deleted successfully.'.'gender:name']
-masculine = '%(name)s „%(obj)s” usunięty pomyślnie.'
+'masculine personal' = '%(name)s „%(obj)s” usunięty pomyślnie.'
+'masculine animate' = '%(name)s „%(obj)s” usunięty pomyślnie.'
+'masculine inanimate' = '%(name)s „%(obj)s” usunięty pomyślnie.'
 feminine = '%(name)s „%(obj)s” usunięta pomyślnie.'
 neuter = '%(name)s „%(obj)s” usunięte pomyślnie.'
 
 ['%(name)s with ID “%(key)s” doesn’t exist. Perhaps it was deleted?'.'gender:name']
-masculine = '%(name)s z ID „%(key)s” nie istnieje. Może został usunięty?'
+'masculine personal' = '%(name)s z ID „%(key)s” nie istnieje. Może został usunięty?'
+'masculine animate' = '%(name)s z ID „%(key)s” nie istnieje. Może został usunięty?'
+'masculine inanimate' = '%(name)s z ID „%(key)s” nie istnieje. Może został usunięty?'
 feminine = '%(name)s z ID „%(key)s” nie istnieje. Może została usunięta?'
 neuter = '%(name)s z ID „%(key)s” nie istnieje. Może zostało usunięte?'
 
 ['%(count)s %(name)s was changed successfully.'.'plurals:count'.one.'gender:name']
-masculine = '%(count)s %(name)s został pomyślnie zmieniony.'
+'masculine personal' = '%(count)s %(name)s został pomyślnie zmieniony.'
+'masculine animate' = '%(count)s %(name)s został pomyślnie zmieniony.'
+'masculine inanimate' = '%(count)s %(name)s został pomyślnie zmieniony.'
 feminine = '%(count)s %(name)s została pomyślnie zmieniona.'
 neuter = '%(count)s %(name)s zostało pomyślnie zmienione.'
 
