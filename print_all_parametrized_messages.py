@@ -260,6 +260,29 @@ for package, domain in (
                     shouldbeexamples.append(
                         parse(rule, python_brace_format, count=placeable['count'], name=placeable['name'])
                     )
+            if param_names == ['class_name', 'instance', 'related_objects']:
+                placeables = []
+                for singular in singulars:
+                    placeables.append({'class_name': singular, 'instance': 'maciek', 'related_objects': 'user maciek'})
+                for placeable in placeables:
+                    examples.append(
+                        entry.msgstr
+                        % {
+                            'class_name': placeable['class_name'][1],
+                            'instance': placeable['instance'],
+                            'related_objects': placeable['related_objects'],
+                        }
+                    )
+                for placeable in placeables:
+                    shouldbeexamples.append(
+                        parse(
+                            rule,
+                            python_brace_format,
+                            class_name=placeable['class_name'],
+                            instance=placeable['instance'],
+                            related_objects=placeable['related_objects'],
+                        )
+                    )
             shouldbeoutput = ''
             if not rule:
                 shouldbeoutput += 'no need to enhance or not parametrized with models verbose name'
