@@ -7,7 +7,6 @@ import polib
 import toml
 import yaml
 from rich.console import Console
-from rich.pretty import Pretty
 from rich.table import Table
 from rich.text import Text
 
