@@ -37,4 +37,5 @@ jobs:
         path: django
     - name: Run script
       run: |
+        python print_improvements.py django pl
         python print_all_parametrized_messages.py pl django
