@@ -93,10 +93,9 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
                 translated_entry,
                 [example for example in render_examples(translated_entry, parameters_values)],
                 enhanced_translation,
-                [
-                    example
-                    for example in render_enhanced_examples(enhanced_translation, parameters_values, improvements)
-                ],
+                [example for example in render_enhanced_examples(enhanced_translation, parameters_values, improvements)]
+                if enhanced_translation
+                else [],
             )
         )
 
