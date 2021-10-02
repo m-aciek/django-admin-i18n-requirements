@@ -9,7 +9,7 @@ from django_resources import DjangoResources
 @dataclass(frozen=True)
 class ParametersSet:
     name: str
-    parameters: list[Union[str, POEntry]]
+    parameters: list[Union[int, POEntry]]
 
 
 @dataclass(frozen=True)
@@ -24,6 +24,9 @@ class DjangoMessagesParameters:
         auth = self.django_resources.django_pofile('contrib/auth')
         return ParametersSet("model_verbose_name_plural", [auth.find('users'), auth.find('groups')])
 
+    def number(self):
+        return ParametersSet("number", [1, 2, 5])
+
     def parameters_mapping(self):
         return {
             'Select %s': {'': self.model_verbose_name()},
@@ -31,5 +34,8 @@ class DjangoMessagesParameters:
             'Select %s to view': {'': self.model_verbose_name()},
             'Add %(name)s': {'name': self.model_verbose_name()},
             'Delete selected %(verbose_name_plural)s': {'verbose_name_plural': self.model_verbose_name_plural()},
-            'Successfully deleted %(count)d %(items)s.': {},
+            'Successfully deleted %(count)d %(items)s.': {
+                'count': self.number(),
+                'items': self.model_verbose_name_plural(),
+            },
         }
