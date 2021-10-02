@@ -29,7 +29,11 @@ def get_parameters(msgid: str) -> list[str]:
 
 def order(entry: POEntry):
     if 'contrib/admin/views/main.py' in (occurence[0] for occurence in entry.occurrences):
-        return POEntry('')
+        return POEntry('', occurrences=[])
+    if 'contrib/admin/templates/admin/change_list_object_tools.html' in (
+        occurence[0] for occurence in entry.occurrences
+    ):
+        return POEntry('', occurrences=[()])
     return entry
 
 
@@ -77,7 +81,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
     with open(f'{language}.toml') as rules_src:
         improvements = load(rules_src)
     rendered_improvements = []
-    for entry in sorted(admin_keys, key=order)[:2]:
+    for entry in sorted(admin_keys, key=order)[:4]:
         translated_entry = admin.find(entry.msgid)
         if print == MessageSet.improved and entry.msgid not in improvements:
             continue
