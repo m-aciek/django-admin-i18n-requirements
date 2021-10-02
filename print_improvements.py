@@ -8,11 +8,14 @@ from polib import POEntry
 from rich.console import Console
 from rich.table import Table
 from rich.text import Text
+from rich.traceback import install
 from toml import load
 from typer import run
 
 from django_resources import DjangoResources
 from parameters import DjangoMessagesParameters, ParametersSet
+
+install(show_locals=True)
 
 
 class MessageSet(str, Enum):
@@ -71,7 +74,10 @@ def render_enhanced_examples(
                 }
         else:
             for value in values.parameters:
-                yield translated_entry % {parameter: value.msgstr}
+                yield translated_entry % {
+                    parameter: value.msgstr,
+                    f'{parameter}.accusative': rules.get(f'{value.msgid}.accusative'),
+                }
 
 
 def print_improvements(django_clone_path: Path, language: str, print: MessageSet = MessageSet.improved) -> None:

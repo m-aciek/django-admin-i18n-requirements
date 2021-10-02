@@ -1,6 +1,7 @@
 'Select %s' = 'Wybierz %(.accusative)s'
 'Select %s to change' = 'Wybierz %(.accusative)s do zmiany'
 'Select %s to view' = 'Wybierz %(.accusative)s do obejrzenia'
+'Add %(name)s' = 'Dodaj %(name.accusative)s'
 'Cannot delete %(name)s' = 'Nie można usunąć %(name.genitive)s'
 'Added {name} “{object}”.' = 'Dodano {name.accusative} „{object}”.'
 'Changed {fields} for {name} “{object}”.' = 'Zmodyfikowano {fields} {name.genitive} „{object}”'
