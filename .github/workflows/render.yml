@@ -38,4 +38,4 @@ jobs:
     - name: Run script
       run: |
         python print_improvements.py django pl
-        python print_all_parametrized_messages.py pl django
+        python print_all_parametrized_messages.py pl django --print all
