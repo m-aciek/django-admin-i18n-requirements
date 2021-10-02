@@ -57,10 +57,16 @@ def render_examples(translated_entry: POEntry, parameters_values: dict[str, Para
     for parameter, values in parameters_values.items():
         if parameter == '':
             for value in values.parameters:
-                yield translated_entry.msgstr % (value.msgstr,)
+                if isinstance(value, POEntry):
+                    yield translated_entry.msgstr % (value.msgstr,)
+                else:
+                    yield translated_entry.msgstr % (value,)
         else:
             for value in values.parameters:
-                yield translated_entry.msgstr % {parameter: value.msgstr}
+                if isinstance(value, POEntry):
+                    yield translated_entry.msgstr % {parameter: value.msgstr}
+                else:
+                    yield translated_entry.msgstr % {parameter: value}
 
 
 def render_enhanced_examples(
@@ -102,7 +108,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
     with open(f'{language}.toml') as rules_src:
         improvements = load(rules_src)
     rendered_improvements = []
-    for entry in sorted(admin_keys, key=order)[:5]:
+    for entry in sorted(admin_keys, key=order)[:6]:
         translated_entry = admin.find(entry.msgid)
         if print == MessageSet.improved and entry.msgid not in improvements:
             continue
