@@ -1,7 +1,7 @@
 from enum import Enum
 from pathlib import Path
 from re import findall
-from typing import Generator
+from typing import Generator, Union
 
 import yaml
 from polib import POEntry
@@ -64,20 +64,35 @@ def render_examples(translated_entry: POEntry, parameters_values: dict[str, Para
 
 
 def render_enhanced_examples(
-    translated_entry: str, parameters_values: dict[str, ParametersSet], rules: dict
+    translated_entry: Union[dict, str], parameters_values: dict[str, ParametersSet], rules: dict
 ) -> Generator:
-    for parameter, values in parameters_values.items():
-        if parameter == '':
-            for value in values.parameters:
-                yield translated_entry % {
+    for value in list(parameters_values.values())[0].parameters:
+        yield from render_enhanced_example(translated_entry, {list(parameters_values.keys())[0]: value}, rules)
+
+
+def render_enhanced_example(
+    translated_entry: Union[dict, str], parameters_values: dict[str, Union[str, POEntry]], rules: dict
+) -> Generator:
+    if isinstance(translated_entry, dict):
+        inflection, inflecting_parameter = list(translated_entry.keys())[0].split(':')
+        value = parameters_values[inflecting_parameter].msgid
+        inflection_category = rules.get(f'{value}.{inflection}')
+        translation = list(translated_entry.values())[0].get(inflection_category)
+        fallback = list(translated_entry.values())[0].get('other')
+        yield from render_enhanced_example(translation or fallback, parameters_values, rules)
+    else:
+        formattables = {}
+        for parameter, value in parameters_values.items():
+            if parameter == '':
+                formattables |= {
                     '.accusative': rules.get(f'{value.msgid}.accusative'),
                 }
-        else:
-            for value in values.parameters:
-                yield translated_entry % {
+            else:
+                formattables |= {
                     parameter: value.msgstr,
                     f'{parameter}.accusative': rules.get(f'{value.msgid}.accusative'),
                 }
+        yield translated_entry % formattables
 
 
 def print_improvements(django_clone_path: Path, language: str, print: MessageSet = MessageSet.improved) -> None:
@@ -87,7 +102,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
     with open(f'{language}.toml') as rules_src:
         improvements = load(rules_src)
     rendered_improvements = []
-    for entry in sorted(admin_keys, key=order)[:4]:
+    for entry in sorted(admin_keys, key=order)[:5]:
         translated_entry = admin.find(entry.msgid)
         if print == MessageSet.improved and entry.msgid not in improvements:
             continue

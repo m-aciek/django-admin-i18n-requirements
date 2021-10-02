@@ -17,6 +17,7 @@
 'users.genitive' = 'użytkowników'
 'group.accusative' = 'grupę'
 'groups.genitive' = 'grup'
+'groups.accusative' = 'grupy'
 'permissions.genitive' = 'uprawnień'
 'session.accusative' = 'sesję'
 'sessions.genitive' = 'sesji'
