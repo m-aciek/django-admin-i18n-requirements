@@ -54,32 +54,9 @@ def format_examples(examples: list[str]) -> Text:
     return Text('\n'.join(examples))
 
 
-def render_examples(translated_entry: POEntry, parameters_values: dict[str, ParametersSet]) -> Generator:
-    print(parameters_values)
-    print(dict([('doo', 'bar')]))
-    print(dict([('param', value) for value in list(parameters_values.values())[0].parameters]))
-    print([dict([(param, value) for value in values.parameters]) for param, values in parameters_values.items()])
-    print(list(parameters_values.items())[0])  # [[(count, 1) (count, 2)], [(items, 1), (items, 2)])
-    param, values = list(parameters_values.items())[0]
-    print(param, values.parameters)
-    print([[(param, value) for value in values.parameters] for param, values in parameters_values.items()])
-    print(
-        list(
-            dict(el)
-            for el in list(
-                product(
-                    *[[(param, value) for value in values.parameters] for param, values in parameters_values.items()]
-                )
-            )
-        )
-    )
-    for element in list(
-        dict(el)
-        for el in list(
-            product(*[[(param, value) for value in values.parameters] for param, values in parameters_values.items()])
-        )
-    ):
-        new_element = {}
+def render_examples(translated_entry: POEntry, parameters_values: list[dict[str, Union[int, POEntry]]]) -> Generator:
+    for element in parameters_values:
+        new_element: dict[str, Union[int, str]] = {}
         for key, value in element.items():
             if isinstance(value, POEntry):
                 new_element[key] = value.msgstr
@@ -89,35 +66,17 @@ def render_examples(translated_entry: POEntry, parameters_values: dict[str, Para
             yield translated_entry.msgstr % new_element.values()
         else:
             yield translated_entry.msgstr % new_element
-    # for parameter, values in parameters_values.items():
-    #     if parameter == '':
-    #         for value in values.parameters:
-    #             if isinstance(value, POEntry):
-    #                 yield translated_entry.msgstr % (value.msgstr,)
-    #             else:
-    #                 yield translated_entry.msgstr % (value,)
-    #     else:
-    #         for value in values.parameters:
-    #             if isinstance(value, POEntry):
-    #                 yield translated_entry.msgstr % {parameter: value.msgstr}
-    #             else:
-    #                 yield translated_entry.msgstr % {parameter: value}
 
 
 def render_enhanced_examples(
-    translated_entry: Union[dict, str], parameters_values: dict[str, ParametersSet], rules: dict
+    translated_entry: Union[dict, str], parameters_values: list[dict[str, Union[int, POEntry]]], rules: dict
 ) -> Generator:
-    for element in list(
-        dict(el)
-        for el in list(
-            product(*[[(param, value) for value in values.parameters] for param, values in parameters_values.items()])
-        )
-    ):
+    for element in parameters_values:
         yield from render_enhanced_example(translated_entry, element, rules)
 
 
 def render_enhanced_example(
-    translated_entry: Union[dict, str], parameters_values: dict[str, Union[str, POEntry]], rules: dict
+    translated_entry: Union[dict, str], parameters_values: dict[str, Union[int, POEntry]], rules: dict
 ) -> Generator:
     if isinstance(translated_entry, dict):
         inflection, inflecting_parameter = list(translated_entry.keys())[0].split(':')
@@ -164,7 +123,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
         if print == MessageSet.with_parameters and not parameters:
             continue
         parameters_mapping = DjangoMessagesParameters(resources).parameters_mapping()
-        parameters_values = {param: parameters_mapping[entry.msgid][param] for param in parameters}
+        parameters_values = parameters_mapping[entry.msgid]
         enhanced_translation = improvements.get(entry.msgid)
         rendered_improvements.append(
             (
