@@ -35,4 +35,6 @@ class DjangoMessagesParameters:
                 {'count': count, 'items': items} for count, items in self.model_ngettext()
             ],
             'Cannot delete %(name)s': [{'name': name} for name in set(map(lambda x: x[1], self.model_ngettext()))],
+            'Add another %(verbose_name)s': [{'verbose_name': value} for value in self.model_verbose_name()],
+            'Added {name} “{object}”.': [{'name': name, 'object': 'maciek'} for name in self.model_verbose_name()],
         }

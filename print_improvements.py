@@ -80,7 +80,7 @@ def render_enhanced_examples(
 
 def render_enhanced_example(
     translated_entry: Union[dict, str],
-    parameters_values: dict[str, Union[int, POEntry]],
+    parameters_values: dict[str, Union[int, str, POEntry]],
     rules: dict,
     plural_forms_string: str,
 ) -> Generator:
@@ -105,14 +105,14 @@ def render_enhanced_example(
                     '.accusative': rules.get(f'{value.msgid}.accusative'),
                     '.genitive': rules.get(f'{value.msgid}.genitive'),
                 }
-            elif isinstance(value, int):
-                formattables |= {parameter: value}
-            else:
+            elif isinstance(value, POEntry):
                 formattables |= {
                     parameter: value.msgstr,
                     f'{parameter}.accusative': rules.get(f'{value.msgid}.accusative'),
                     f'{parameter}.genitive': rules.get(f'{value.msgid}.genitive'),
                 }
+            else:
+                formattables |= {parameter: value}
         yield translated_entry % formattables
 
 
@@ -139,7 +139,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
     with open(f'{language}.toml') as rules_src:
         improvements = load(rules_src)
     rendered_improvements = []
-    for entry in sorted(admin_keys, key=order)[:8]:
+    for entry in sorted(admin_keys, key=order):
         translated_entry = admin.find(entry.msgid)
         plural_forms = admin.metadata['Plural-Forms']
         if print == MessageSet.improved and entry.msgid not in improvements:
