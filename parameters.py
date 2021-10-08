@@ -34,4 +34,5 @@ class DjangoMessagesParameters:
             'Successfully deleted %(count)d %(items)s.': [
                 {'count': count, 'items': items} for count, items in self.model_ngettext()
             ],
+            'Cannot delete %(name)s': [{'name': name} for name in set(map(lambda x: x[1], self.model_ngettext()))],
         }
