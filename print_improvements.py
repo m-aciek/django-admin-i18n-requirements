@@ -65,7 +65,7 @@ def render_examples(translated_entry: POEntry, parameters_values: list[dict[str,
                 new_element[key] = value
         if 'python-format' in translated_entry.flags:
             if all(map(lambda x: x == '', element.keys())):
-                yield translated_entry.msgstr % new_element.values()
+                yield translated_entry.msgstr % tuple(new_element.values())
             else:
                 yield translated_entry.msgstr % new_element
         elif 'python-brace-format' in translated_entry.flags:

@@ -10,6 +10,7 @@
 'Change %s' = 'Zmień %(.accusative)s'
 'View %s' = 'Obejrzyj %(.accusative)s'
 'Deleting %(class_name)s %(instance)s would require deleting the following protected related objects: %(related_objects)s' = 'Usunięcie %(class_name.genitive)s %(instance)s może wiązać się z usunięciem następujących chronionych obiektów pokrewnych: %(related_objects)s'
+'Are you sure you want to delete the %(object_name)s "%(escaped_object)s"? All of the following related items will be deleted:' = 'Czy chcesz skasować %(object_name.accusative)s „%(escaped_object)s”? Następujące obiekty powiązane zostaną usunięte:'
 
 'users.gender' = 'masculine personal'
 'users.accusative' = 'użytkowników'
@@ -149,3 +150,11 @@ one = 'Wybierz %(total_count)s %(module_name)s'
 ['Select all %(total_count)s %(module_name)s'.'plurals:total_count'.many.'gender:module_name']
 'masculine personal' = 'Wybierz wszystkich %(total_count)s %(module_name.genitive)s'
 'other' = 'Wybierz wszystkie %(total_count)s %(module_name.genitive)s'
+
+["Deleting the %(object_name)s '%(escaped_object)s' would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:".'gender:object_name']
+'feminine' = 'Usunięcie %(object_name.genitive)s „%(escaped_object)s” wiązałoby się z usunięciem obiektów z nią powiązanych, ale niestety nie posiadasz uprawnień do usunięcia obiektów następujących typów:'
+'other' = 'Usunięcie %(object_name.genitive)s „%(escaped_object)s” wiązałoby się z usunięciem obiektów z nim powiązanych, ale niestety nie posiadasz uprawnień do usunięcia obiektów następujących typów:'
+
+["Deleting the %(object_name)s '%(escaped_object)s' would require deleting the following protected related objects:".'gender:object_name']
+'feminine' = "Usunięcie %(object_name.genitive)s „%(escaped_object)s” wymagałoby skasowania następujących chronionych obiektów, które są z nią powiązane:"
+'other' = "Usunięcie %(object_name.genitive)s „%(escaped_object)s” wymagałoby skasowania następujących chronionych obiektów, które są z nim powiązane:"
