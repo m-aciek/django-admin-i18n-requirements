@@ -139,7 +139,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
     with open(f'{language}.toml') as rules_src:
         improvements = load(rules_src)
     rendered_improvements = []
-    for entry in sorted(admin_keys, key=order)[:7]:
+    for entry in sorted(admin_keys, key=order)[:8]:
         translated_entry = admin.find(entry.msgid)
         plural_forms = admin.metadata['Plural-Forms']
         if print == MessageSet.improved and entry.msgid not in improvements:
@@ -148,7 +148,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
         if print == MessageSet.with_parameters and not parameters:
             continue
         parameters_mapping = DjangoMessagesParameters(resources).parameters_mapping()
-        parameters_values = parameters_mapping[entry.msgid]
+        parameters_values = parameters_mapping.get(entry.msgid, [])
         enhanced_translation = improvements.get(entry.msgid)
         rendered_improvements.append(
             (
