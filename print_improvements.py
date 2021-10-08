@@ -1,4 +1,5 @@
 from enum import Enum
+from itertools import product
 from pathlib import Path
 from re import findall
 from typing import Generator, Union
@@ -54,26 +55,65 @@ def format_examples(examples: list[str]) -> Text:
 
 
 def render_examples(translated_entry: POEntry, parameters_values: dict[str, ParametersSet]) -> Generator:
-    for parameter, values in parameters_values.items():
-        if parameter == '':
-            for value in values.parameters:
-                if isinstance(value, POEntry):
-                    yield translated_entry.msgstr % (value.msgstr,)
-                else:
-                    yield translated_entry.msgstr % (value,)
+    print(parameters_values)
+    print(dict([('doo', 'bar')]))
+    print(dict([('param', value) for value in list(parameters_values.values())[0].parameters]))
+    print([dict([(param, value) for value in values.parameters]) for param, values in parameters_values.items()])
+    print(list(parameters_values.items())[0])  # [[(count, 1) (count, 2)], [(items, 1), (items, 2)])
+    param, values = list(parameters_values.items())[0]
+    print(param, values.parameters)
+    print([[(param, value) for value in values.parameters] for param, values in parameters_values.items()])
+    print(
+        list(
+            dict(el)
+            for el in list(
+                product(
+                    *[[(param, value) for value in values.parameters] for param, values in parameters_values.items()]
+                )
+            )
+        )
+    )
+    for element in list(
+        dict(el)
+        for el in list(
+            product(*[[(param, value) for value in values.parameters] for param, values in parameters_values.items()])
+        )
+    ):
+        new_element = {}
+        for key, value in element.items():
+            if isinstance(value, POEntry):
+                new_element[key] = value.msgstr
+            else:
+                new_element[key] = value
+        if all(map(lambda x: x == '', element.keys())):
+            yield translated_entry.msgstr % new_element.values()
         else:
-            for value in values.parameters:
-                if isinstance(value, POEntry):
-                    yield translated_entry.msgstr % {parameter: value.msgstr}
-                else:
-                    yield translated_entry.msgstr % {parameter: value}
+            yield translated_entry.msgstr % new_element
+    # for parameter, values in parameters_values.items():
+    #     if parameter == '':
+    #         for value in values.parameters:
+    #             if isinstance(value, POEntry):
+    #                 yield translated_entry.msgstr % (value.msgstr,)
+    #             else:
+    #                 yield translated_entry.msgstr % (value,)
+    #     else:
+    #         for value in values.parameters:
+    #             if isinstance(value, POEntry):
+    #                 yield translated_entry.msgstr % {parameter: value.msgstr}
+    #             else:
+    #                 yield translated_entry.msgstr % {parameter: value}
 
 
 def render_enhanced_examples(
     translated_entry: Union[dict, str], parameters_values: dict[str, ParametersSet], rules: dict
 ) -> Generator:
-    for value in list(parameters_values.values())[0].parameters:
-        yield from render_enhanced_example(translated_entry, {list(parameters_values.keys())[0]: value}, rules)
+    for element in list(
+        dict(el)
+        for el in list(
+            product(*[[(param, value) for value in values.parameters] for param, values in parameters_values.items()])
+        )
+    ):
+        yield from render_enhanced_example(translated_entry, element, rules)
 
 
 def render_enhanced_example(
@@ -81,11 +121,17 @@ def render_enhanced_example(
 ) -> Generator:
     if isinstance(translated_entry, dict):
         inflection, inflecting_parameter = list(translated_entry.keys())[0].split(':')
-        value = parameters_values[inflecting_parameter].msgid
-        inflection_category = rules.get(f'{value}.{inflection}')
-        translation = list(translated_entry.values())[0].get(inflection_category)
-        fallback = list(translated_entry.values())[0].get('other')
-        yield from render_enhanced_example(translation or fallback, parameters_values, rules)
+        if inflection == "plurals":
+            value = parameters_values[inflecting_parameter]
+            inflection_category = 'one'
+            translation = list(translated_entry.values())[0].get(inflection_category)
+            yield from render_enhanced_example(translation, parameters_values, rules)
+        else:
+            value = parameters_values[inflecting_parameter].msgid
+            inflection_category = rules.get(f'{value}.{inflection}')
+            translation = list(translated_entry.values())[0].get(inflection_category)
+            fallback = list(translated_entry.values())[0].get('other')
+            yield from render_enhanced_example(translation or fallback, parameters_values, rules)
     else:
         formattables = {}
         for parameter, value in parameters_values.items():
@@ -93,6 +139,8 @@ def render_enhanced_example(
                 formattables |= {
                     '.accusative': rules.get(f'{value.msgid}.accusative'),
                 }
+            elif isinstance(value, int):
+                formattables |= {parameter: value}
             else:
                 formattables |= {
                     parameter: value.msgstr,
