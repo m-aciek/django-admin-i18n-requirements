@@ -1,3 +1,4 @@
+from collections import UserString
 from enum import Enum
 from gettext import GNUTranslations, c2py
 from pathlib import Path
@@ -76,9 +77,10 @@ def render_enhanced_examples(
     parameters_values: list[dict[str, Union[int, POEntry]]],
     rules: dict,
     plural_forms_string: str,
+    format: str,
 ) -> Generator:
     for element in parameters_values:
-        yield from render_enhanced_example(translated_entry, element, rules, plural_forms_string)
+        yield from render_enhanced_example(translated_entry, element, rules, plural_forms_string, format)
 
 
 def render_enhanced_example(
@@ -86,6 +88,7 @@ def render_enhanced_example(
     parameters_values: dict[str, Union[int, str, POEntry]],
     rules: dict,
     plural_forms_string: str,
+    format: str,
 ) -> Generator:
     if isinstance(translated_entry, dict):
         inflection, inflecting_parameter = list(translated_entry.keys())[0].split(':')
@@ -93,30 +96,44 @@ def render_enhanced_example(
             value = parameters_values[inflecting_parameter]
             inflection_category = plural_category(plural_forms_string, value)
             translation = list(translated_entry.values())[0].get(inflection_category)
-            yield from render_enhanced_example(translation, parameters_values, rules, plural_forms_string)
+            yield from render_enhanced_example(translation, parameters_values, rules, plural_forms_string, format)
         else:
             value = parameters_values[inflecting_parameter].msgid
             inflection_category = rules.get(f'{value}.{inflection}')
             translation = list(translated_entry.values())[0].get(inflection_category)
             fallback = list(translated_entry.values())[0].get('other')
-            yield from render_enhanced_example(translation or fallback, parameters_values, rules, plural_forms_string)
+            yield from render_enhanced_example(
+                translation or fallback, parameters_values, rules, plural_forms_string, format
+            )
     else:
         formattables = {}
         for parameter, value in parameters_values.items():
-            if parameter == '':
-                formattables |= {
-                    '.accusative': rules.get(f'{value.msgid}.accusative'),
-                    '.genitive': rules.get(f'{value.msgid}.genitive'),
-                }
-            elif isinstance(value, POEntry):
-                formattables |= {
-                    parameter: value.msgstr,
-                    f'{parameter}.accusative': rules.get(f'{value.msgid}.accusative'),
-                    f'{parameter}.genitive': rules.get(f'{value.msgid}.genitive'),
-                }
+            if format == 'python-format':
+                if parameter == '':
+                    formattables |= {
+                        '.accusative': rules.get(f'{value.msgid}.accusative'),
+                        '.genitive': rules.get(f'{value.msgid}.genitive'),
+                    }
+                elif isinstance(value, POEntry):
+                    formattables |= {
+                        parameter: value.msgstr,
+                        f'{parameter}.accusative': rules.get(f'{value.msgid}.accusative'),
+                        f'{parameter}.genitive': rules.get(f'{value.msgid}.genitive'),
+                    }
+                else:
+                    formattables |= {parameter: value}
             else:
-                formattables |= {parameter: value}
-        yield translated_entry % formattables
+                if isinstance(value, POEntry):
+                    formattable = UserString(value.msgstr)
+                    formattable.accusative = rules.get(f'{value.msgid}.accusative')
+                    formattable.genitive = rules.get(f'{value.msgid}.genitive')
+                    formattables |= {parameter: formattable}
+                else:
+                    formattables |= {parameter: value}
+        if format == 'python-format':
+            yield translated_entry % formattables
+        else:
+            yield translated_entry.format(**formattables)
 
 
 def plural_category(plural_forms_string: str, value: int) -> str:
@@ -153,6 +170,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
         parameters_mapping = DjangoMessagesParameters(resources).parameters_mapping()
         parameters_values = parameters_mapping.get(entry.msgid, [])
         enhanced_translation = improvements.get(entry.msgid)
+        format = next(filter(lambda x: x in ('python-format', 'python-brace-format'), translated_entry.flags))
         rendered_improvements.append(
             (
                 entry,
@@ -162,7 +180,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
                 [
                     example
                     for example in render_enhanced_examples(
-                        enhanced_translation, parameters_values, improvements, plural_forms
+                        enhanced_translation, parameters_values, improvements, plural_forms, format
                     )
                 ]
                 if enhanced_translation
