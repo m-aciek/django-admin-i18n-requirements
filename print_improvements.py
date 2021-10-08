@@ -62,10 +62,13 @@ def render_examples(translated_entry: POEntry, parameters_values: list[dict[str,
                 new_element[key] = value.msgstr
             else:
                 new_element[key] = value
-        if all(map(lambda x: x == '', element.keys())):
-            yield translated_entry.msgstr % new_element.values()
-        else:
-            yield translated_entry.msgstr % new_element
+        if 'python-format' in translated_entry.flags:
+            if all(map(lambda x: x == '', element.keys())):
+                yield translated_entry.msgstr % new_element.values()
+            else:
+                yield translated_entry.msgstr % new_element
+        elif 'python-brace-format' in translated_entry.flags:
+            yield translated_entry.msgstr.format(**new_element)
 
 
 def render_enhanced_examples(
