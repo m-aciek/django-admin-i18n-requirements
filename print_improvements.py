@@ -1,5 +1,5 @@
 from enum import Enum
-from itertools import product
+from gettext import GNUTranslations, c2py
 from pathlib import Path
 from re import findall
 from typing import Generator, Union
@@ -14,7 +14,7 @@ from toml import load
 from typer import run
 
 from django_resources import DjangoResources
-from parameters import DjangoMessagesParameters, ParametersSet
+from parameters import DjangoMessagesParameters
 
 install(show_locals=True)
 
@@ -69,34 +69,41 @@ def render_examples(translated_entry: POEntry, parameters_values: list[dict[str,
 
 
 def render_enhanced_examples(
-    translated_entry: Union[dict, str], parameters_values: list[dict[str, Union[int, POEntry]]], rules: dict
+    translated_entry: Union[dict, str],
+    parameters_values: list[dict[str, Union[int, POEntry]]],
+    rules: dict,
+    plural_forms_string: str,
 ) -> Generator:
     for element in parameters_values:
-        yield from render_enhanced_example(translated_entry, element, rules)
+        yield from render_enhanced_example(translated_entry, element, rules, plural_forms_string)
 
 
 def render_enhanced_example(
-    translated_entry: Union[dict, str], parameters_values: dict[str, Union[int, POEntry]], rules: dict
+    translated_entry: Union[dict, str],
+    parameters_values: dict[str, Union[int, POEntry]],
+    rules: dict,
+    plural_forms_string: str,
 ) -> Generator:
     if isinstance(translated_entry, dict):
         inflection, inflecting_parameter = list(translated_entry.keys())[0].split(':')
         if inflection == "plurals":
             value = parameters_values[inflecting_parameter]
-            inflection_category = 'one'
+            inflection_category = plural_category(plural_forms_string, value)
             translation = list(translated_entry.values())[0].get(inflection_category)
-            yield from render_enhanced_example(translation, parameters_values, rules)
+            yield from render_enhanced_example(translation, parameters_values, rules, plural_forms_string)
         else:
             value = parameters_values[inflecting_parameter].msgid
             inflection_category = rules.get(f'{value}.{inflection}')
             translation = list(translated_entry.values())[0].get(inflection_category)
             fallback = list(translated_entry.values())[0].get('other')
-            yield from render_enhanced_example(translation or fallback, parameters_values, rules)
+            yield from render_enhanced_example(translation or fallback, parameters_values, rules, plural_forms_string)
     else:
         formattables = {}
         for parameter, value in parameters_values.items():
             if parameter == '':
                 formattables |= {
                     '.accusative': rules.get(f'{value.msgid}.accusative'),
+                    '.genitive': rules.get(f'{value.msgid}.genitive'),
                 }
             elif isinstance(value, int):
                 formattables |= {parameter: value}
@@ -104,8 +111,25 @@ def render_enhanced_example(
                 formattables |= {
                     parameter: value.msgstr,
                     f'{parameter}.accusative': rules.get(f'{value.msgid}.accusative'),
+                    f'{parameter}.genitive': rules.get(f'{value.msgid}.genitive'),
                 }
         yield translated_entry % formattables
+
+
+def plural_category(plural_forms_string: str, value: int) -> str:
+    gnu_translations = GNUTranslations()
+    gnu_translations._catalog = {
+        ("PLURAL-CATEGORY", 0): "one",
+        ("PLURAL-CATEGORY", 1): "few",
+        ("PLURAL-CATEGORY", 2): "many",
+        ("PLURAL-CATEGORY", 3): "other",
+    }
+    v = plural_forms_string
+    v = v.split(';')
+    plural = v[1].split('plural=')[1]
+    gnu_translations.plural = c2py(plural)
+    inflection_category = gnu_translations.ngettext('PLURAL-CATEGORY', 'PLURAL-CATEGORIES', value)
+    return inflection_category
 
 
 def print_improvements(django_clone_path: Path, language: str, print: MessageSet = MessageSet.improved) -> None:
@@ -117,6 +141,7 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
     rendered_improvements = []
     for entry in sorted(admin_keys, key=order)[:6]:
         translated_entry = admin.find(entry.msgid)
+        plural_forms = admin.metadata['Plural-Forms']
         if print == MessageSet.improved and entry.msgid not in improvements:
             continue
         parameters = get_parameters(entry.msgid)
@@ -131,7 +156,12 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
                 translated_entry,
                 [example for example in render_examples(translated_entry, parameters_values)],
                 enhanced_translation,
-                [example for example in render_enhanced_examples(enhanced_translation, parameters_values, improvements)]
+                [
+                    example
+                    for example in render_enhanced_examples(
+                        enhanced_translation, parameters_values, improvements, plural_forms
+                    )
+                ]
                 if enhanced_translation
                 else [],
             )
