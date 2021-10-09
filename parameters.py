@@ -102,4 +102,7 @@ class DjangoMessagesParameters:
             "types of objects:": [
                 {'objects_name': name, 'count': count} for count, name in self.model_ngettext([1, 2])
             ],
+            "Deleting the selected %(objects_name)s would require deleting the following protected related objects:": [
+                {'objects_name': name, 'count': count} for count, name in self.model_ngettext([1, 2])
+            ],
         }
