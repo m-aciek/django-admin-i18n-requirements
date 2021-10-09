@@ -15,12 +15,13 @@ class DjangoMessagesParameters:
         auth = self.django_resources.django_pofile('contrib/auth')
         return [auth.find('users'), auth.find('groups')]
 
-    def model_ngettext(self):
-        return (
-            [(1, model) for model in self.model_verbose_name()]
-            + [(2, models) for models in self.model_verbose_name_plural()]
-            + [(5, models) for models in self.model_verbose_name_plural()]
-        )
+    def model_ngettext(self, counts: list[int] = [1, 2, 5]):
+        result = []
+        for count in counts:
+            models = self.model_verbose_name() if count == 1 else self.model_verbose_name_plural()
+            for model in models:
+                result.append((count, model))
+        return result
 
     def parameters_mapping(self):
         return {
@@ -98,5 +99,7 @@ class DjangoMessagesParameters:
             ],
             "Deleting the selected %(objects_name)s would result in deleting related "
             "objects, but your account doesn't have permission to delete the following "
-            "types of objects:": [{'objects_name': name} for name in set(map(lambda x: x[1], self.model_ngettext()))],
+            "types of objects:": [
+                {'objects_name': name, 'count': count} for count, name in self.model_ngettext([1, 2])
+            ],
         }

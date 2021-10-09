@@ -158,3 +158,10 @@ one = 'Wybierz %(total_count)s %(module_name)s'
 ["Deleting the %(object_name)s '%(escaped_object)s' would require deleting the following protected related objects:".'gender:object_name']
 'feminine' = "Usunięcie %(object_name.genitive)s „%(escaped_object)s” wymagałoby skasowania następujących chronionych obiektów, które są z nią powiązane:"
 'other' = "Usunięcie %(object_name.genitive)s „%(escaped_object)s” wymagałoby skasowania następujących chronionych obiektów, które są z nim powiązane:"
+
+["Deleting the selected %(objects_name)s would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:".'plurals:count'.one.'gender:objects_name']
+feminine = "Usunięcie wybranej %(objects_name.genitive)s spowoduje skasowanie obiektów, które są z nią powiązane. Niestety nie posiadasz uprawnień do usunięcia następujących typów obiektów:"
+other = "Usunięcie wybranego %(objects_name.genitive)s spowoduje skasowanie obiektów, które są z nim powiązane. Niestety nie posiadasz uprawnień do usunięcia następujących typów obiektów:"
+
+["Deleting the selected %(objects_name)s would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:".'plurals:count']
+other = "Usunięcie wybranych %(objects_name.genitive)s spowoduje skasowanie obiektów, które są z nimi powiązane. Niestety nie posiadasz uprawnień do usunięcia następujących typów obiektów:"

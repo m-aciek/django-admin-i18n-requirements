@@ -95,7 +95,9 @@ def render_enhanced_example(
         if inflection == "plurals":
             value = parameters_values[inflecting_parameter]
             inflection_category = plural_category(plural_forms_string, value)
-            translation = list(translated_entry.values())[0].get(inflection_category)
+            translation = list(translated_entry.values())[0].get(inflection_category) or list(
+                translated_entry.values()
+            )[0].get('other')
             yield from render_enhanced_example(translation, parameters_values, rules, plural_forms_string, format)
         else:
             value = parameters_values[inflecting_parameter].msgid
