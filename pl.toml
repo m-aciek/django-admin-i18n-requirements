@@ -172,3 +172,13 @@ other = "Usunięcie wybranego %(objects_name.genitive)s wymaga skasowania nastę
 
 ["Deleting the selected %(objects_name)s would require deleting the following protected related objects:".'plurals:count']
 other = "Usunięcie wybranych %(objects_name.genitive)s wymaga skasowania następujących chronionych obiektów, które są z nimi powiązane:"
+
+["Are you sure you want to delete the selected %(objects_name)s? All of the following objects and their related items will be deleted:".'plurals:count'.one.'gender:objects_name']
+'masculine inanimate' = "Czy chcesz skasować zaznaczony %(objects_name.accusative)s? Następujące obiekty oraz obiekty od nich zależne zostaną skasowane:"
+feminine = "Czy chcesz skasować zaznaczoną %(objects_name.accusative)s? Następujące obiekty oraz obiekty od nich zależne zostaną skasowane:"
+neuter = "Czy chcesz skasować zaznaczone %(objects_name.accusative)s? Następujące obiekty oraz obiekty od nich zależne zostaną skasowane:"
+other = "Czy chcesz skasować zaznaczonego %(objects_name.accusative)s? Następujące obiekty oraz obiekty od nich zależne zostaną skasowane:"
+
+["Are you sure you want to delete the selected %(objects_name)s? All of the following objects and their related items will be deleted:".'plurals:count'.other.'gender:objects_name']
+'masculine personal' = "Czy chcesz skasować zaznaczonych %(objects_name.accusative)s? Następujące obiekty oraz obiekty od nich zależne zostaną skasowane:"
+other = "Czy chcesz skasować zaznaczone %(objects_name.accusative)s? Następujące obiekty oraz obiekty od nich zależne zostaną skasowane:"
