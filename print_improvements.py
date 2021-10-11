@@ -113,22 +113,22 @@ def render_enhanced_example(
             if format == 'python-format':
                 if parameter == '':
                     formattables |= {
-                        '.accusative': rules.get(f'{value.msgid}.accusative'),
-                        '.genitive': rules.get(f'{value.msgid}.genitive'),
+                        '.accusative': rules.get(f'{value.msgid}.accusative', value.msgstr),
+                        '.genitive': rules.get(f'{value.msgid}.genitive', value.msgstr),
                     }
                 elif isinstance(value, POEntry):
                     formattables |= {
                         parameter: value.msgstr,
-                        f'{parameter}.accusative': rules.get(f'{value.msgid}.accusative'),
-                        f'{parameter}.genitive': rules.get(f'{value.msgid}.genitive'),
+                        f'{parameter}.accusative': rules.get(f'{value.msgid}.accusative', value.msgstr),
+                        f'{parameter}.genitive': rules.get(f'{value.msgid}.genitive', value.msgstr),
                     }
                 else:
                     formattables |= {parameter: value}
             else:
                 if isinstance(value, POEntry):
                     formattable = UserString(value.msgstr)
-                    formattable.accusative = rules.get(f'{value.msgid}.accusative')
-                    formattable.genitive = rules.get(f'{value.msgid}.genitive')
+                    formattable.accusative = rules.get(f'{value.msgid}.accusative', value.msgstr)
+                    formattable.genitive = rules.get(f'{value.msgid}.genitive', value.msgstr)
                     formattables |= {parameter: formattable}
                 else:
                     formattables |= {parameter: value}
