@@ -9,11 +9,13 @@ class DjangoMessagesParameters:
 
     def model_verbose_name(self):
         auth = self.django_resources.django_pofile('contrib/auth')
-        return [auth.find('user'), auth.find('group')]
+        sessions = self.django_resources.django_pofile('contrib/sessions')
+        return [auth.find('user'), auth.find('group'), auth.find('permission'), sessions.find('session')]
 
     def model_verbose_name_plural(self):
         auth = self.django_resources.django_pofile('contrib/auth')
-        return [auth.find('users'), auth.find('groups')]
+        sessions = self.django_resources.django_pofile('contrib/sessions')
+        return [auth.find('users'), auth.find('groups'), auth.find('permissions'), sessions.find('sessions')]
 
     def model_ngettext(self, counts: list[int] = [1, 2, 5]):
         result = []
