@@ -144,4 +144,5 @@ class DjangoMessagesParameters:
             "following objects and their related items will be deleted:": [
                 {'objects_name': name, 'count': count} for count, name in self.model_ngettext([1, 2])
             ],
+            "Change selected %(model)s": [{'model': model} for model in self.model_verbose_name()],
         }
