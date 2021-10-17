@@ -12,13 +12,43 @@ class DjangoMessagesParameters:
     def model_verbose_name(self):
         auth = self.django_resources.django_pofile('contrib/auth')
         sessions = self.django_resources.django_pofile('contrib/sessions')
-        return [auth.find('user'), auth.find('group'), auth.find('permission'), sessions.find('session')]
+        sites = self.django_resources.django_pofile('contrib/sites')
+        redirects = self.django_resources.django_pofile('contrib/redirects')
+        flatpages = self.django_resources.django_pofile('contrib/flatpages')
+        admin = self.django_resources.django_pofile('contrib/admin')
+        contenttypes = self.django_resources.django_pofile('contrib/contenttypes')
+        return [
+            auth.find('user'),
+            auth.find('group'),
+            auth.find('permission'),
+            sessions.find('session'),
+            sites.find('site'),
+            redirects.find('redirect'),
+            flatpages.find('flat page'),
+            admin.find('log entry'),
+            contenttypes.find('content type'),
+        ]
 
     @lru_cache
     def model_verbose_name_plural(self):
         auth = self.django_resources.django_pofile('contrib/auth')
         sessions = self.django_resources.django_pofile('contrib/sessions')
-        return [auth.find('users'), auth.find('groups'), auth.find('permissions'), sessions.find('sessions')]
+        sites = self.django_resources.django_pofile('contrib/sites')
+        redirects = self.django_resources.django_pofile('contrib/redirects')
+        flatpages = self.django_resources.django_pofile('contrib/flatpages')
+        admin = self.django_resources.django_pofile('contrib/admin')
+        contenttypes = self.django_resources.django_pofile('contrib/contenttypes')
+        return [
+            auth.find('users'),
+            auth.find('groups'),
+            auth.find('permissions'),
+            sessions.find('sessions'),
+            sites.find('sites'),
+            redirects.find('redirects'),
+            flatpages.find('flat pages'),
+            admin.find('log entries'),
+            contenttypes.find('content types'),
+        ]
 
     def model_ngettext(self, counts: list[int] = [1, 2, 5]):
         result = []
