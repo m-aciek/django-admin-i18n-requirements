@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import lru_cache
 
 from django_resources import DjangoResources
 
@@ -7,11 +8,13 @@ from django_resources import DjangoResources
 class DjangoMessagesParameters:
     django_resources: DjangoResources
 
+    @lru_cache
     def model_verbose_name(self):
         auth = self.django_resources.django_pofile('contrib/auth')
         sessions = self.django_resources.django_pofile('contrib/sessions')
         return [auth.find('user'), auth.find('group'), auth.find('permission'), sessions.find('session')]
 
+    @lru_cache
     def model_verbose_name_plural(self):
         auth = self.django_resources.django_pofile('contrib/auth')
         sessions = self.django_resources.django_pofile('contrib/sessions')
