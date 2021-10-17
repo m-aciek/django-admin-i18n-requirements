@@ -162,3 +162,9 @@ other = "Czy chcesz skasować zaznaczonego %(objects_name.accusative)s? Następu
 ["Are you sure you want to delete the selected %(objects_name)s? All of the following objects and their related items will be deleted:".'plurals:count'.other.'gender:objects_name']
 'masculine personal' = "Czy chcesz skasować zaznaczonych %(objects_name.accusative)s? Następujące obiekty oraz obiekty od nich zależne zostaną skasowane:"
 other = "Czy chcesz skasować zaznaczone %(objects_name.accusative)s? Następujące obiekty oraz obiekty od nich zależne zostaną skasowane:"
+
+["Change selected %(model)s".'gender:model']
+'masculine inanimate' = 'Zmień wybrany %(model.accusative)s'
+feminine = 'Zmień wybraną %(model.accusative)s'
+neuter = 'Zmień wybrane %(model.accusative)s'
+other = 'Zmień wybranego %(model.accusative)s'
