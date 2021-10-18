@@ -155,14 +155,16 @@ def plural_category(plural_forms_string: str, value: int) -> str:
     return inflection_category
 
 
-def print_improvements(django_clone_path: Path, language: str, print: MessageSet = MessageSet.improved) -> None:
-    admin_keys = DjangoResources(django_clone_path, 'en').admin_pofile()
+def print_improvements(
+    django_clone_path: Path, language: str, print: MessageSet = MessageSet.improved, module: str = 'contrib/admin'
+) -> None:
+    module_keys = DjangoResources(django_clone_path, 'en').django_pofile(module)
     resources = DjangoResources(django_clone_path, language)
     admin = resources.admin_pofile()
     with open(f'{language}.toml') as rules_src:
         improvements = load(rules_src)
     rendered_improvements = []
-    for entry in sorted(admin_keys, key=order):
+    for entry in sorted(module_keys, key=order):
         translated_entry = admin.find(entry.msgid)
         plural_forms = admin.metadata['Plural-Forms']
         if print == MessageSet.improved and entry.msgid not in improvements:
