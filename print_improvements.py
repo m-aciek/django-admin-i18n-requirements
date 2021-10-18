@@ -169,15 +169,14 @@ def print_improvements(
         plural_forms = admin.metadata['Plural-Forms']
         if print == MessageSet.improved and entry.msgid not in improvements:
             continue
-        parameters = get_parameters(entry.msgid)
+        with_parameters = 'python-format' in entry.flags or 'python-brace-format' in entry.flags
+        parameters = with_parameters and get_parameters(entry.msgid)
         if print == MessageSet.with_parameters and not parameters:
             continue
         parameters_mapping = DjangoMessagesParameters(resources).parameters_mapping()
         parameters_values = parameters_mapping.get(entry.msgid, [])
         enhanced_translation = improvements.get(entry.msgid)
-        format = parameters and next(
-            filter(lambda x: x in ('python-format', 'python-brace-format'), translated_entry.flags)
-        )
+        format = with_parameters and next(filter(lambda x: x in ('python-format', 'python-brace-format'), entry.flags))
         rendered_improvements.append(
             (
                 entry,
