@@ -172,7 +172,9 @@ def print_improvements(django_clone_path: Path, language: str, print: MessageSet
         parameters_mapping = DjangoMessagesParameters(resources).parameters_mapping()
         parameters_values = parameters_mapping.get(entry.msgid, [])
         enhanced_translation = improvements.get(entry.msgid)
-        format = next(filter(lambda x: x in ('python-format', 'python-brace-format'), translated_entry.flags))
+        format = parameters and next(
+            filter(lambda x: x in ('python-format', 'python-brace-format'), translated_entry.flags)
+        )
         rendered_improvements.append(
             (
                 entry,
