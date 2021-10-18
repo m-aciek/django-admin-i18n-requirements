@@ -45,8 +45,9 @@ def order(entry: POEntry):
 def format_translation_with_examples(entry: POEntry, translated_entry: POEntry, examples: list[str]) -> Text:
     current = Text()
     current.append('\n'.join(f'{path}:{line}' for path, line in entry.occurrences) + '\n')
-    current.append(translated_entry.msgid + '\n', "bold")
-    current.append(translated_entry.msgstr + '\n', "bold")
+    current.append(entry.msgid + '\n', "bold")
+    if translated_entry:
+        current.append(translated_entry.msgstr + '\n', "bold")
     current.append('\n'.join(examples))
     return current
 
