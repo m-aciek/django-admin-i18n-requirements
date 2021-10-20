@@ -119,8 +119,7 @@ other = '%(count)s %(name)s został pomyślnie zmieniony.'
 other = '%(count)s %(name)s zostały pomyślnie zmienione.'
 
 ['%(count)s %(name)s was changed successfully.'.'plurals:count']
-many = '%(count)s %(name.genitive)s zostało pomyślnie zmienionych.'
-other = '%(count)s %(name.genitive)s zostało pomyślnie zmienione.'
+other = '%(count)s %(name.genitive)s zostało pomyślnie zmienionych.'
 
 ['Select all %(total_count)s %(module_name)s'.'plurals:total_count']
 one = 'Wybierz %(total_count)s %(module_name)s'
