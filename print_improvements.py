@@ -57,6 +57,9 @@ def format_examples(examples: list[str]) -> Text:
 
 
 def render_examples(translated_entry: POEntry, parameters_values: list[dict[str, Union[int, POEntry]]]) -> Generator:
+    if not translated_entry:
+        yield ""
+        return
     for element in parameters_values:
         new_element: dict[str, Union[int, str]] = {}
         for key, value in element.items():
