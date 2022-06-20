@@ -161,15 +161,32 @@ def plural_category(plural_forms_string: str, value: int) -> str:
 def print_improvements(
     django_clone_path: Path, language: str, print: MessageSet = MessageSet.improved, module: str = 'contrib/admin'
 ) -> None:
-    module_keys = DjangoResources(django_clone_path, 'en').django_pofile(module)
+    module_keys = DjangoResources(django_clone_path, 'en').django_pofile(module) + [
+        POEntry(
+            msgid="%(count)d %(name)s",
+            msgid_plural="%(count)d %(name_plural)s",
+            occurrences=[("contrib/admin/templates/admin/pagination.html", '9')],
+            flags=["python-format"],
+        )
+    ]
     resources = DjangoResources(django_clone_path, language)
     admin = resources.admin_pofile()
     with open(f'{language}.toml') as rules_src:
         improvements = load(rules_src)
     rendered_improvements = []
+    plural_forms = admin.metadata['Plural-Forms']
     for entry in sorted(module_keys, key=order):
-        translated_entry = admin.find(entry.msgid)
-        plural_forms = admin.metadata['Plural-Forms']
+        translated_entry = admin.find(entry.msgid) or (
+            POEntry(
+                msgid="%(count)d %(name)s",
+                msgid_plural="%(count)d %(name_plural)s",
+                msgstr="%(count)d %(name)s",
+                msgstr_plural=["%(count)d %(name_plural)s", "%(count)d %(name_plural)s", "%(count)d %(name_plural)s"],
+                flags=["python-format"],
+            )
+            if entry.msgid == "%(count)d %(name)s"
+            else None
+        )
         if print == MessageSet.improved and entry.msgid not in improvements:
             continue
         with_parameters = 'python-format' in entry.flags or 'python-brace-format' in entry.flags

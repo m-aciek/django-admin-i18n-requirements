@@ -49,7 +49,7 @@ class DjangoMessagesParameters:
             contenttypes.find('content types'),
         ]
 
-    def model_ngettext(self, counts: list[int] = [1, 2, 5]):
+    def model_ngettext(self, counts: list[int] = [1, 5, 22]):
         result = []
         for count in counts:
             models = self.model_verbose_name() if count == 1 else self.model_verbose_name_plural()
@@ -144,4 +144,7 @@ class DjangoMessagesParameters:
                 {'objects_name': name, 'count': count} for count, name in self.model_ngettext([1, 2])
             ],
             "Change selected %(model)s": [{'model': model} for model in self.model_verbose_name()],
+            "%(count)d %(name)s": [
+                {"count": number, "name": name, "name_plural": name} for number, name in self.model_ngettext()
+            ],
         }

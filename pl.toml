@@ -166,3 +166,11 @@ other = "Czy chcesz skasować zaznaczone %(objects_name.accusative)s? Następuj�
 feminine = 'Zmień wybraną %(model.accusative)s'
 neuter = 'Zmień wybrane %(model.accusative)s'
 other = 'Zmień wybranego %(model.accusative)s'
+
+["%(count)d %(name)s".'plurals:count']
+one = "%(count)d %(name)s"
+other = "%(count)d %(name_plural.genitive)s"
+
+["%(count)d %(name)s".'plurals:count'.few.'gender:name']
+'masculine personal' = "%(count)d %(name_plural.genitive)s"
+other = "%(count)d %(name_plural)s"
