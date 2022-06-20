@@ -53,13 +53,12 @@
 'masculine personal' = 'Usuń wybranych %(verbose_name_plural.accusative)s'
 'other' = 'Usuń wybrane %(verbose_name_plural.accusative)s'
 
-['Successfully deleted %(count)d %(items)s.'.'gender:items'.'masculine personal'.'plurals:count']
+['Successfully deleted %(count)d %(items)s.'.'plurals:count']
 one = 'Pomyślnie usunięto %(count)d %(items.accusative)s.'
 other = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
-['Successfully deleted %(count)d %(items)s.'.'gender:items'.'other'.'plurals:count']
-one = 'Pomyślnie usunięto %(count)d %(items.accusative)s.'
-few = 'Pomyślnie usunięto %(count)d %(items)s.'
-other = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
+['Successfully deleted %(count)d %(items)s.'.'plurals:count'.few.'gender:items']
+'masculine personal' = 'Pomyślnie usunięto %(count)d %(items.genitive)s.'
+other = 'Pomyślnie usunięto %(count)d %(items)s.'
 
 ['Add another %(verbose_name)s'.'gender:verbose_name']
 'masculine inanimate' = 'Dodaj kolejny %(verbose_name.accusative)s'
