@@ -1,0 +1,9 @@
+"session.gender" = "feminine"
+"redirect.gender" = "feminine"
+"flat page.gender" = "feminine"
+"log entry.gender" = "feminine"
+
+# https://forum.djangoproject.com/t/spanish-phrases-in-the-default-translation-with-an-incorrect-use-of-grammatical-gender/35459
+["The {name} “{obj}” was changed successfully."."gender:name"]
+feminine = "La {name} “{obj}” se cambió correctamente."
+other = "El {name} “{obj}” se cambió correctamente."
