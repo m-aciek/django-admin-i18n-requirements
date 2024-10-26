@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from functools import lru_cache
+from functools import lru_cache, cache
+from itertools import product
 
 from django_resources import DjangoResources
 
@@ -48,6 +49,11 @@ class DjangoMessagesParameters:
             admin.find('log entries'),
             contenttypes.find('content types'),
         ]
+
+    @cache
+    def fields(self):
+        admin, auth, contenttypes, flatpages, redirects, sessions, sites = self._load_resources()
+        return [auth.find('email address')]
 
     def model_ngettext(self, counts: list[int] = [1, 5, 22]):
         result = []
@@ -146,5 +152,8 @@ class DjangoMessagesParameters:
             "Change selected %(model)s": [{'model': model} for model in self.model_verbose_name()],
             "%(count)d %(name)s": [
                 {"count": number, "name": name, "name_plural": name} for number, name in self.model_ngettext()
+            ],
+            "%(model_name)s with this %(field_labels)s already exists.": [
+                {"model_name": model, "field_labels": fields} for model, fields in product(self.model_verbose_name(), self.fields())
             ],
         }

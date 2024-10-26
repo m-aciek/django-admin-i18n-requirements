@@ -1,0 +1,6 @@
+'email address.gender' = 'feminine'
+
+# https://forum.djangoproject.com/t/grammatical-error-in-german-translation-of-form-validation/34478
+['%(model_name)s with this %(field_labels)s already exists.'.'gender:field_labels']
+feminine = '%(model_name)s mit diese %(field_labels)s existiert bereits.'
+other = '%(model_name)s mit diesem %(field_labels)s existiert bereits.'
