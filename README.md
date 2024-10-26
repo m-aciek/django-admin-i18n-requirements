@@ -22,6 +22,10 @@ Currently supported:
 
 Clone Django repository and this repository to your workspace. Run the script:
 
-    % python print_improvements.py [path-to-django-source-code-clone] [your-language-iso-code]
+    % python print_improvements.py [path-to-django-source-code-clone] [your-language-iso-code] --module [conf|contrib/admin|contrib/…]
 
-It will print three columns.
+It will print three columns. You can edit your language TOML file and see the effect.
+
+**Next steps**
+
+The data gathered here can be a help for enhancement work, that's around [ticket 11688](https://code.djangoproject.com/ticket/11688) and being worked [here](https://github.com/django/django/compare/main...m-aciek:django:ticket-11688) (current challange is changing the template rendering to improve i18n capacity).
