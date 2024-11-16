@@ -4,3 +4,9 @@
 ['%(model_name)s with this %(field_labels)s already exists.'.'gender:field_labels']
 feminine = '%(model_name)s mit dieser %(field_labels)s existiert bereits.'
 other = '%(model_name)s mit diesem %(field_labels)s existiert bereits.'
+# to properly handle multiple fields in above example we'd need to move "this" into field_labels
+'%(model_name)s with %(field_labels)s already exists.' = '%(model_name)s mit %(field_labels)s existiert bereits.'  # this dative can be assumed, not verbose
+['this %(field_label)s'.'gender:field_label']
+feminine = 'dieser %(field_label)s'
+other = 'diesem %(field_label)s'
+# this way we should be able to produce 'mit dieser E-Mail-Adresse und diesem Login'
